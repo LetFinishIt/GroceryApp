@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, Text , Image } from 'react-native';
+import { View, StyleSheet, Text , Image, ImageBackground } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import AuthForm from '../components/AuthForm';
 import NavLink from '../components/NavLink';
@@ -11,11 +11,11 @@ const SigninScreen = () => {
   return (
     <View style={styles.container}>
       {/* <NavigationEvents onWillFocus={clearErrorMessage} /> */}
-      <Image
-          source={require('../../assets/images/grolist.png')}
-          resizeMode="contain"
-          style={styles.logoImage}
-      />
+      <ImageBackground
+          source={require('../../assets/images/background.png')}
+          resizeMode="cover"
+          style={styles.container}
+      >
       <AuthForm
         //headerText="Sign In to Your Account"
         // errorMessage={state.errorMessage}
@@ -30,6 +30,7 @@ const SigninScreen = () => {
         text="View Recipe UI For now"
         routeName="RecipeList"
       />
+      </ImageBackground>
     </View>
   );
 };
