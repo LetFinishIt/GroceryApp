@@ -1,25 +1,65 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, Text , Image } from 'react-native';
+import { View, StyleSheet, Text , Image, ImageBackground } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import AuthForm from '../components/AuthForm';
 import NavLink from '../components/NavLink';
 //import { Context } from '../context/AuthContext';
+import Api from '../api/apiInstance';
+import * as SecureStore from 'expo-secure-store';
 
-const SigninScreen = () => {
+function SigninScreen({navigator}) {
   //const { state, signin, clearErrorMessage } = useContext(Context);
+  
+  const handleLogin = async (email, password) => {
+    console.log("email: ", email);
+    console.log("password: ", password);
+    const body = {
+      email: email,
+      password: password
+    }
+
+    Api()
+    .post("login", body, {
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      console.log("response.data: ", response.data);
+      saveAuthInfo(response.data.accessToken, response.data.refreshToken, response.data.user);
+    })
+    .catch((e) => {
+      console.log("e.response: ", e.response);
+      console.log("e.message: ", e.message);
+    });
+  }
+
+  const saveAuthInfo = async (accessToken, refreshToken, user) => {
+    await SecureStore.setItemAsync("accessToken", accessToken);
+    await SecureStore.setItemAsync("refreshToken", refreshToken);
+    await SecureStore.setItemAsync("firstName", user.firstName);
+    await SecureStore.setItemAsync("lastName", user.last_name);
+    await SecureStore.setItemAsync("email", user.email);
+    console.log("await SecureStore.getItemAsync('accessToken'): ", await SecureStore.getItemAsync("accessToken"))
+    console.log("await SecureStore.getItemAsync('refreshToken'): ", await SecureStore.getItemAsync("refreshToken"))
+    console.log("await SecureStore.getItemAsync('firstName'): ", await SecureStore.getItemAsync("firstName"))
+    console.log("await SecureStore.getItemAsync('lastName'): ", await SecureStore.getItemAsync("lastName"))
+    console.log("await SecureStore.getItemAsync('email'): ", await SecureStore.getItemAsync("email"))
+  }
 
   return (
     <View style={styles.container}>
       {/* <NavigationEvents onWillFocus={clearErrorMessage} /> */}
-      <Image
-          source={require('../../assets/images/grolist.png')}
-          resizeMode="contain"
-          style={styles.logoImage}
-      />
+      <ImageBackground
+          source={require('../../assets/images/background.png')}
+          resizeMode="cover"
+          style={styles.container}
+      >
       <AuthForm
         //headerText="Sign In to Your Account"
         // errorMessage={state.errorMessage}
-        //onSubmit={signin}
+        onSubmit={(email, password, firstName, lastName) => handleLogin(email, password)}
         submitButtonText="Sign In"
       />
       <NavLink
@@ -30,6 +70,7 @@ const SigninScreen = () => {
         text="View Recipe UI For now"
         routeName="RecipeList"
       />
+      </ImageBackground>
     </View>
   );
 };

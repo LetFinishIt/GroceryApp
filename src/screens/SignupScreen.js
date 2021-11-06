@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, ImageBackground } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 //import { Context as AuthContext } from '../context/AuthContext';
 import AuthForm from '../components/AuthForm';
@@ -11,20 +11,23 @@ const SignupScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* <NavigationEvents onWillFocus={clearErrorMessage} /> */}
-      <Image
-          source={require('../../assets/images/grocerystore.jpeg')}
-          style={styles.logoImage}
+      <ImageBackground
+          source={require('../../assets/images/background.png')}
+          resizeMode="cover"
+          style={styles.container}
+      >
+        <AuthForm
+          //headerText="Sign Up for GroList"
+          // errorMessage={state.errorMessage}
+          submitButtonText="Sign Up"
+          //onSubmit={signup}
+          isSignUp
         />
-      <AuthForm
-        //headerText="Sign Up for GroList"
-        // errorMessage={state.errorMessage}
-        submitButtonText="Sign Up"
-        //onSubmit={signup}
-      />
-      <NavLink
-        routeName="Signin"
-        text="Already have an account? Sign in instead!"
-      />
+        <NavLink
+          routeName="Signin"
+          text="Already have an account? Sign in instead!"
+        />
+      </ImageBackground>
     </View>
   );
 };
