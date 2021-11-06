@@ -20,6 +20,7 @@ const SignupScreen = ({ navigation }) => {
         // errorMessage={state.errorMessage}
         submitButtonText="Sign Up"
         //onSubmit={signup}
+        isSignUp
       />
       <NavLink
         routeName="Signin"

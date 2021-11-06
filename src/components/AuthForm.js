@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Spacer from './Spacer';
 
-const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
+const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSignUp = false }) => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,6 +13,29 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
     <KeyboardAvoidingView 
     style={styles.form}
     >
+      {isSignUp &&
+      <>
+        <Spacer />
+        <Input
+          label="First Name"
+          value={firstName}
+          onChangeText={setFirstName}
+          autoCapitalize="none"
+          autoCorrect={false}
+          labelStyle={styles.label}
+          inputStyle={styles.input}
+        />
+        <Spacer />
+        <Input
+          label="Last Name"
+          value={lastName}
+          onChangeText={setLastName}
+          autoCapitalize="none"
+          autoCorrect={false}
+          labelStyle={styles.label}
+          inputStyle={styles.input}
+        />
+      </>}
       <Spacer />
       <Input
         label="Email"
@@ -39,7 +63,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText }) => {
       <Spacer>
         <Button
           title={submitButtonText}
-          onPress={() => onSubmit({ email, password })}
+          onPress={() => onSubmit(email, password, firstName, lastName)}
         />
       </Spacer>
     </KeyboardAvoidingView>
