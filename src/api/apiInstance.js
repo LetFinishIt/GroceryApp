@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:3001/api/';
+const BASE_URL = 'http://192.168.0.187:3001/api/';
 
 export const Api = () => {
 
