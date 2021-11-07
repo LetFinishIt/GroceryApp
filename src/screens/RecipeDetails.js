@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet, Text, ImageBackground, Modal } from 'react-native';
+import { ScrollView, View, StyleSheet, Text, ImageBackground, Modal } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import NavLink from '../components/NavLink';
 import Api from '../api/apiInstance';
@@ -39,6 +39,71 @@ function RecipeDetails({recipeId}) {
         setPrice(response.data.recipe.price);
         setIngredients(response.data.ingredients);
         setRecipeItems(response.data.recipe.recipeItem);
+        // setRecipeItems([{
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },
+        //   {
+        //     _id: "6187c96bc1374c508f2ae429",
+        //     ingredients: "6185a67c255199bfff188da7",
+        //     itemQuantity: "2",
+        //   },]);
     })
     .catch((e) => {
         console.log("e: ", e.message)
@@ -51,57 +116,59 @@ function RecipeDetails({recipeId}) {
         resizeMode="cover"
         style={styles.container}
     >
-        <View
-            // wrapperStyle={styles.card} 
-            style={styles.cardContainer}
-        >
+        <View style={styles.cardContainer}>
+            <ScrollView
+                // wrapperStyle={styles.card} 
+                contentContainerStyle={styles.scrollViewContainer}
+            >
+                    <SmallSpacer />
+                <Text style={styles.header}>{name}</Text>
                 <SmallSpacer />
-            <Text style={styles.header}>{name}</Text>
-            <SmallSpacer />
-            {/* <Card.Divider/> */}
-            <View style={{alignItems: "center"}}>
-                <Image
-                    style={styles.recipeImage}
-                    resizeMode="contain"
-                    source={{uri: imageUrl}}
-                />
+                {/* <Card.Divider/> */}
+                <View style={{alignItems: "center"}}>
+                    <Image
+                        style={styles.recipeImage}
+                        resizeMode="contain"
+                        source={{uri: imageUrl}}
+                    />
+                    <SmallSpacer />
+                    <View style={styles.ingredientContainer}>
+                    {
+                        recipeItems.map((recipeItem, index) => {
+                            let ingredient = ingredients.find(ingredient => ingredient._id === recipeItem.ingredients)
+                            return (
+                                <Text key={index} style={styles.text}>
+                                    {recipeItem.itemQuantity}
+                                    {/* {" "}{ingredient?.unitType} */}
+                                    {" "}LB
+                                    {/* {" "}{ingredient?.name} */}
+                                    {" "}{index == 1 ? "Flour" : "Tomato Sauce"}
+                                </Text>
+                                );
+                        })
+                    }
+                </View>
+                </View>
                 <SmallSpacer />
-                <View style={styles.ingredientContainer}>
-                {
-                    recipeItems.map((recipeItem, index) => {
-                        let ingredient = ingredients.find(ingredient => ingredient._id === recipeItem.ingredients)
-                        return (
-                            <Text key={index} style={styles.text}>
-                                {recipeItem.itemQuantity}
-                                {/* {" "}{ingredient?.unitType} */}
-                                {" "}LB
-                                {/* {" "}{ingredient?.name} */}
-                                {" "}{index == 1 ? "Flour" : "Tomato Sauce"}
-                            </Text>
-                            );
-                    })
-                }
-            </View>
-            </View>
-            <SmallSpacer />
-            <Text style={styles.text}>
-                {description}
-            </Text>
-            <SmallSpacer />
-            <View style={styles.buttonContainer}>
-                <Button 
-                    onPress={() => navigate("RecipeList")} 
-                    title={"Edit"}
-                    style={styles.button}
-                />
+                <Text style={styles.text}>
+                    {description}
+                </Text>
                 <SmallSpacer />
-                <Button 
-                    onPress={() => navigate("RecipeList")} 
-                    title={"Close"}
-                    style={styles.button}
-                />
-            </View>
-            <SmallSpacer />
+                <View style={styles.buttonContainer}>
+                    <Button 
+                        onPress={() => navigate("RecipeList")} 
+                        title={"Edit"}
+                        style={styles.button}
+                    />
+                    <SmallSpacer />
+                    <Button 
+                        onPress={() => navigate("RecipeList")} 
+                        title={"Close"}
+                        style={styles.button}
+                    />
+                </View>
+                <SmallSpacer />
+            </ScrollView>
         </View>
     </ImageBackground>
   );
@@ -121,11 +188,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: "center",
         padding: 10,
+        marginTop: 20,
+        marginBottom: 20,
     },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: "center",
+        paddingTop: 20,
+        paddingBottom: 20,
     },
     header: {
         fontSize: 24,
@@ -136,11 +207,16 @@ const styles = StyleSheet.create({
         // width: "100%",
         alignItems: "flex-start",
         textAlign: 'left',
+        paddingLeft: 20,
+        paddingRight: 20,
     },
     recipeImage: {
         height: 160,
-        width: 400,
+        width: 300,
         alignSelf: 'center',
+    },
+    scrollViewContainer: {
+        alignItems: "center",
     },
     text: {
         fontSize: 18,
