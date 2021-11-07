@@ -81,8 +81,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 15,
     marginRight: 15,
+    paddingLeft: 10,
+    paddingRight: 10,
     marginTop: 15,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0,0,0,0.65)",
     borderRadius: 10
   },
   label: {

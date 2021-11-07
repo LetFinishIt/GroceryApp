@@ -6,6 +6,7 @@ import NavLink from '../components/NavLink';
 //import { Context } from '../context/AuthContext';
 import Api from '../api/apiInstance';
 import * as SecureStore from 'expo-secure-store';
+import {navigate} from "../navigationRef";
 
 function SigninScreen({navigator}) {
   //const { state, signin, clearErrorMessage } = useContext(Context);
@@ -46,6 +47,7 @@ function SigninScreen({navigator}) {
     console.log("await SecureStore.getItemAsync('firstName'): ", await SecureStore.getItemAsync("firstName"))
     console.log("await SecureStore.getItemAsync('lastName'): ", await SecureStore.getItemAsync("lastName"))
     console.log("await SecureStore.getItemAsync('email'): ", await SecureStore.getItemAsync("email"))
+    navigate("RecipeList");
   }
 
   return (
@@ -62,14 +64,16 @@ function SigninScreen({navigator}) {
         onSubmit={(email, password, firstName, lastName) => handleLogin(email, password)}
         submitButtonText="Sign In"
       />
-      <NavLink
-        text="Dont have an account? Sign up instead"
-        routeName="Signup"
-      />
-      <NavLink
-        text="View Recipe UI For now"
-        routeName="RecipeList"
-      />
+      <View style={styles.linkContainer}>
+        <NavLink
+          text="Dont have an account? Sign up"
+          routeName="Signup"
+        />
+        <NavLink
+          text="View Recipe UI For now"
+          routeName="RecipeList"
+        />
+      </View>
       </ImageBackground>
     </View>
   );
@@ -83,14 +87,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    //marginBottom: 250,
   },
-  logoImage: {
-        height: 200,
-        width: 200,
-        alignSelf: 'center',
-        marginTop: 50,
-        //backgroundColor: 'black',
+  linkContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 15,
+    backgroundColor: "rgba(0,0,0,0.65)",
+    borderRadius: 10
   },
 });
 
