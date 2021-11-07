@@ -47,7 +47,7 @@ function RecipeDetails({recipeId}) {
 
   return (
     <ImageBackground
-        source={require('../../assets/images/lightBackground2.jpg')}
+        source={require('../../assets/images/boards.png')}
         resizeMode="cover"
         style={styles.container}
     >
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         width: "80%",
     },
     cardContainer: {
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: 'rgba(0,0,0,0.65)',
         width: "90%",
         borderRadius: 10,
         alignItems: "center",

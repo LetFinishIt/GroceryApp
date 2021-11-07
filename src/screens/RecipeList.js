@@ -3,7 +3,6 @@ import { StyleSheet, Text, FlatList, TouchableOpacity, View } from "react-native
 import Modal from "react-native-modal"; 
 import { NavigationEvents } from "react-navigation";
 import { ListItem } from "react-native-elements";
-import RecipeDetails from "../components/RecipeDetails";
 //import { Context as TrackContext } from "../context/TrackContext";
 import {navigate} from "../navigationRef";
 
