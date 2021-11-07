@@ -6,6 +6,7 @@ import NavLink from '../components/NavLink';
 //import { Context } from '../context/AuthContext';
 import Api from '../api/apiInstance';
 import * as SecureStore from 'expo-secure-store';
+import {navigate} from "../navigationRef";
 
 function SigninScreen({navigator}) {
   //const { state, signin, clearErrorMessage } = useContext(Context);
@@ -46,6 +47,7 @@ function SigninScreen({navigator}) {
     console.log("await SecureStore.getItemAsync('firstName'): ", await SecureStore.getItemAsync("firstName"))
     console.log("await SecureStore.getItemAsync('lastName'): ", await SecureStore.getItemAsync("lastName"))
     console.log("await SecureStore.getItemAsync('email'): ", await SecureStore.getItemAsync("email"))
+    navigate("RecipeList");
   }
 
   return (
@@ -83,14 +85,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    //marginBottom: 250,
-  },
-  logoImage: {
-        height: 200,
-        width: 200,
-        alignSelf: 'center',
-        marginTop: 50,
-        //backgroundColor: 'black',
   },
 });
 

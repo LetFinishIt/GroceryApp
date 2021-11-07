@@ -22,6 +22,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import SigninScreen from './src/screens/SigninScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import RecipeList from './src/screens/RecipeList';
+import RecipeDetails from './src/screens/RecipeDetails';
 //import { Provider as AuthProvider } from './src/context/AuthContext';
 import { setNavigator } from './src/navigationRef';
 //import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
@@ -45,6 +46,7 @@ const switchNavigator = createSwitchNavigator({
     Signin: SigninScreen,
     Signup: SignupScreen,
     RecipeList: RecipeList,
+    RecipeDetails,
   }),
   // mainFlow: createBottomTabNavigator({
   //   trackListFlow,
