@@ -10,7 +10,10 @@ import { navigate } from '../navigationRef';
 import Spacer from '../components/Spacer';
 import SmallSpacer from '../components/SmallSpacer';
 
-function RecipeDetails({recipeId}) {
+function RecipeDetails(props) {
+    const { navigation } = props;
+    const recipeId = navigation.getParam('recipeId');
+
     const token = SecureStore.getItemAsync("accessToken");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
@@ -23,7 +26,7 @@ function RecipeDetails({recipeId}) {
     console.log("recipeId: ", recipeId);
     Api()
     .get(
-        'recipes/?recipeId=' + "6185a6a7d65b901a1224a26c",
+        'recipes/?recipeId=' + recipeId,
         {
             headers: {
                 authorization: "Bearer " + token,
