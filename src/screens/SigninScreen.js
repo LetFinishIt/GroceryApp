@@ -64,14 +64,16 @@ function SigninScreen({navigator}) {
         onSubmit={(email, password, firstName, lastName) => handleLogin(email, password)}
         submitButtonText="Sign In"
       />
-      <NavLink
-        text="Dont have an account? Sign up instead"
-        routeName="Signup"
-      />
-      <NavLink
-        text="View Recipe UI For now"
-        routeName="RecipeList"
-      />
+      <View style={styles.linkContainer}>
+        <NavLink
+          text="Dont have an account? Sign up"
+          routeName="Signup"
+        />
+        <NavLink
+          text="View Recipe UI For now"
+          routeName="RecipeList"
+        />
+      </View>
       </ImageBackground>
     </View>
   );
@@ -85,6 +87,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+  linkContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 15,
+    backgroundColor: "rgba(0,0,0,0.65)",
+    borderRadius: 10
   },
 });
 

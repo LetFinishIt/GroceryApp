@@ -32,7 +32,7 @@ function RecipeDetails({recipeId}) {
         }
     )
     .then((response) => {
-        // console.log("response.data: ", response.data);
+        console.log("response.data: ", response.data);
         setName(response.data.recipe.recipeName);
         setImageUrl(response.data.recipe.recipePhoto);
         setDescription(response.data.recipe.description);
@@ -76,7 +76,7 @@ function RecipeDetails({recipeId}) {
                                 {/* {" "}{ingredient?.unitType} */}
                                 {" "}LB
                                 {/* {" "}{ingredient?.name} */}
-                                {" "}Flour
+                                {" "}{index == 1 ? "Flour" : "Tomato Sauce"}
                             </Text>
                             );
                     })
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         color: "white",
     },
     ingredientContainer: {
-        width: "100%",
+        // width: "100%",
         alignItems: "flex-start",
         textAlign: 'left',
     },
