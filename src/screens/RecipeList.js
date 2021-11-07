@@ -10,8 +10,8 @@ const RecipeList = ({ navigation }) => {
   //const { state, fetchTracks } = useContext(TrackContext);
 
   let recipes =[
-      {_id : 1 ,  name: 'Chicken Curry'},
-      {_id : 2 ,  name: 'Beef Curry'},
+      {_id : "6184781d533568e45cdbc19c" ,  name: 'Pizza'},
+      {_id : "6185a6a7d65b901a1224a26c" ,  name: 'Beef and Broccoli'},
   ]
 
   return (
@@ -26,7 +26,7 @@ const RecipeList = ({ navigation }) => {
               onPress={() =>
                 //navigation.navigate("TrackDetail", { _id: item._id })
                 // console.log('button pressed'),
-                navigate("RecipeDetails", {recipeId: "6184781d533568e45cdbc19c"})
+                navigate("RecipeDetails", {recipeId: item._id})
               }
             >
               <ListItem>
@@ -44,7 +44,7 @@ const RecipeList = ({ navigation }) => {
 };
 
 RecipeList.navigationOptions = {
-  title: "Recipes",
+  header: () => false,
 };
 
 const styles = StyleSheet.create({});
