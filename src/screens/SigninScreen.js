@@ -6,6 +6,7 @@ import NavLink from '../components/NavLink';
 //import { Context } from '../context/AuthContext';
 import Api from '../api/apiInstance';
 import * as SecureStore from 'expo-secure-store';
+import {navigate} from "../navigationRef";
 
 function SigninScreen({navigator}) {
   //const { state, signin, clearErrorMessage } = useContext(Context);
@@ -26,7 +27,7 @@ function SigninScreen({navigator}) {
       },
     })
     .then((response) => {
-      console.log("response.data: ", response.data);
+      //console.log("response.data: ", response.data);
       saveAuthInfo(response.data.accessToken, response.data.refreshToken, response.data.user);
     })
     .catch((e) => {
@@ -41,11 +42,12 @@ function SigninScreen({navigator}) {
     await SecureStore.setItemAsync("firstName", user.firstName);
     await SecureStore.setItemAsync("lastName", user.last_name);
     await SecureStore.setItemAsync("email", user.email);
-    console.log("await SecureStore.getItemAsync('accessToken'): ", await SecureStore.getItemAsync("accessToken"))
-    console.log("await SecureStore.getItemAsync('refreshToken'): ", await SecureStore.getItemAsync("refreshToken"))
-    console.log("await SecureStore.getItemAsync('firstName'): ", await SecureStore.getItemAsync("firstName"))
-    console.log("await SecureStore.getItemAsync('lastName'): ", await SecureStore.getItemAsync("lastName"))
-    console.log("await SecureStore.getItemAsync('email'): ", await SecureStore.getItemAsync("email"))
+    // console.log("await SecureStore.getItemAsync('accessToken'): ", await SecureStore.getItemAsync("accessToken"))
+    // console.log("await SecureStore.getItemAsync('refreshToken'): ", await SecureStore.getItemAsync("refreshToken"))
+    // console.log("await SecureStore.getItemAsync('firstName'): ", await SecureStore.getItemAsync("firstName"))
+    // console.log("await SecureStore.getItemAsync('lastName'): ", await SecureStore.getItemAsync("lastName"))
+    // console.log("await SecureStore.getItemAsync('email'): ", await SecureStore.getItemAsync("email"))
+    navigate("RecipeList");
   }
 
   return (
@@ -70,6 +72,10 @@ function SigninScreen({navigator}) {
         text="View Recipe UI For now"
         routeName="RecipeList"
       />
+      <NavLink
+        text="Recipe Details"
+        routeName="RecipeDetails"
+      />
       </ImageBackground>
     </View>
   );
@@ -83,14 +89,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    //marginBottom: 250,
-  },
-  logoImage: {
-        height: 200,
-        width: 200,
-        alignSelf: 'center',
-        marginTop: 50,
-        //backgroundColor: 'black',
   },
 });
 

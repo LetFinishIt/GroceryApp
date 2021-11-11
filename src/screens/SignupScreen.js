@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, Image, ImageBackground } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
-//import { Context as AuthContext } from '../context/AuthContext';
+import { Context as AuthContext } from '../context/AuthContext';
 import AuthForm from '../components/AuthForm';
 import NavLink from '../components/NavLink';
+import Api from '../api/apiInstance';
 
 const SignupScreen = ({ navigation }) => {
-  //const { state, signup, clearErrorMessage } = useContext(AuthContext);
+  const { state, signup, clearErrorMessage } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -20,7 +21,7 @@ const SignupScreen = ({ navigation }) => {
           //headerText="Sign Up for GroList"
           // errorMessage={state.errorMessage}
           submitButtonText="Sign Up"
-          //onSubmit={signup}
+          onSubmit={(email,password,firstName,lastName)=>signup({email,password,firstName,lastName})}
           isSignUp
         />
         <NavLink
