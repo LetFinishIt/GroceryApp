@@ -24,10 +24,12 @@ const SignupScreen = ({ navigation }) => {
           onSubmit={(email,password,firstName,lastName)=>signup({email,password,firstName,lastName})}
           isSignUp
         />
-        <NavLink
-          routeName="Signin"
-          text="Already have an account? Sign in instead!"
-        />
+        <View style={styles.linkContainer}>
+          <NavLink
+            routeName="Signin"
+            text="Already have an account? Sign in instead!"
+          />
+        </View>
       </ImageBackground>
     </View>
   );
@@ -50,7 +52,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 50,
     //backgroundColor: 'black',
-},
+  },
+  linkContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 15,
+    backgroundColor: "rgba(0,0,0,0.65)",
+    borderRadius: 10
+  },
 });
 
 export default SignupScreen;

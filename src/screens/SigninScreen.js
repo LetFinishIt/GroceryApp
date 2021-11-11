@@ -42,11 +42,11 @@ function SigninScreen({navigator}) {
     await SecureStore.setItemAsync("firstName", user.firstName);
     await SecureStore.setItemAsync("lastName", user.last_name);
     await SecureStore.setItemAsync("email", user.email);
-    // console.log("await SecureStore.getItemAsync('accessToken'): ", await SecureStore.getItemAsync("accessToken"))
-    // console.log("await SecureStore.getItemAsync('refreshToken'): ", await SecureStore.getItemAsync("refreshToken"))
-    // console.log("await SecureStore.getItemAsync('firstName'): ", await SecureStore.getItemAsync("firstName"))
-    // console.log("await SecureStore.getItemAsync('lastName'): ", await SecureStore.getItemAsync("lastName"))
-    // console.log("await SecureStore.getItemAsync('email'): ", await SecureStore.getItemAsync("email"))
+    console.log("await SecureStore.getItemAsync('accessToken'): ", await SecureStore.getItemAsync("accessToken"))
+    console.log("await SecureStore.getItemAsync('refreshToken'): ", await SecureStore.getItemAsync("refreshToken"))
+    console.log("await SecureStore.getItemAsync('firstName'): ", await SecureStore.getItemAsync("firstName"))
+    console.log("await SecureStore.getItemAsync('lastName'): ", await SecureStore.getItemAsync("lastName"))
+    console.log("await SecureStore.getItemAsync('email'): ", await SecureStore.getItemAsync("email"))
     navigate("RecipeList");
   }
 
@@ -64,18 +64,16 @@ function SigninScreen({navigator}) {
         onSubmit={(email, password, firstName, lastName) => handleLogin(email, password)}
         submitButtonText="Sign In"
       />
-      <NavLink
-        text="Dont have an account? Sign up instead"
-        routeName="Signup"
-      />
-      <NavLink
-        text="View Recipe UI For now"
-        routeName="RecipeList"
-      />
-      <NavLink
-        text="Recipe Details"
-        routeName="RecipeDetails"
-      />
+      <View style={styles.linkContainer}>
+        <NavLink
+          text="Dont have an account? Sign up"
+          routeName="Signup"
+        />
+        <NavLink
+          text="View Recipe UI For now"
+          routeName="RecipeList"
+        />
+      </View>
       </ImageBackground>
     </View>
   );
@@ -89,6 +87,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+  linkContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 15,
+    backgroundColor: "rgba(0,0,0,0.65)",
+    borderRadius: 10
   },
 });
 
