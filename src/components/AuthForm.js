@@ -25,7 +25,6 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSign
           labelStyle={styles.label}
           inputStyle={styles.input}
         />
-        <Spacer />
         <Input
           label="Last Name"
           value={lastName}
@@ -36,7 +35,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSign
           inputStyle={styles.input}
         />
       </>}
-      <Spacer />
+      <Spacer/>
       <Input
         label="Email"
         value={email}
@@ -46,7 +45,6 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSign
         labelStyle={styles.label}
         inputStyle={styles.input}
       />
-      <Spacer />
       <Input
         secureTextEntry
         label="Password"

@@ -36,12 +36,12 @@ function RecipeDetails(props) {
     )
     .then((response) => {
         console.log("response.data: ", response.data);
-        setName(response.data.recipe.recipeName);
-        setImageUrl(response.data.recipe.recipePhoto);
-        setDescription(response.data.recipe.description);
-        setPrice(response.data.recipe.price);
+        setName(response.data.recipes[0].recipeName);
+        setImageUrl(response.data.recipes[0].recipePhoto);
+        setDescription(response.data.recipes[0].description);
+        setPrice(response.data.recipes[0].price);
         setIngredients(response.data.ingredients);
-        setRecipeItems(response.data.recipe.recipeItem);
+        setRecipeItems(response.data.recipes[0].recipeItem);
         // setRecipeItems([{
         //     _id: "6187c96bc1374c508f2ae429",
         //     ingredients: "6185a67c255199bfff188da7",
@@ -142,10 +142,10 @@ function RecipeDetails(props) {
                             return (
                                 <Text key={index} style={styles.text}>
                                     {recipeItem.itemQuantity}
-                                    {/* {" "}{ingredient?.unitType} */}
-                                    {" "}LB
-                                    {/* {" "}{ingredient?.name} */}
-                                    {" "}{index == 1 ? "Flour" : "Tomato Sauce"}
+                                    {" "}{ingredient?.unitType}
+                                    {/* {" "}LB */}
+                                    {" "}{ingredient?.name}
+                                    {/* {" "}{index == 1 ? "Flour" : "Tomato Sauce"} */}
                                 </Text>
                                 );
                         })
