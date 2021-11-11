@@ -31,7 +31,7 @@ function SigninScreen({navigator}) {
       saveAuthInfo(response.data.accessToken, response.data.refreshToken, response.data.user);
     })
     .catch((e) => {
-      console.log("e.response: ", e.response);
+      // console.log("e.response: ", e.response);
       console.log("e.message: ", e.message);
     });
   }
