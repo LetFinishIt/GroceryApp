@@ -1,6 +1,7 @@
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import createDataContext from "./createDataContext";
-import trackerApi from "../api/tracker";
+import Api from "../api/apiInstance";
+import trackerApi from "../api/apiInstance";
 import { navigate } from "../navigationRef";
 
 const authReducer = (state, action) => {
@@ -22,7 +23,7 @@ const tryLocalSignin = (dispatch) => async () => {
   const token = await AsyncStorage.getItem("token");
   if (token) {
     dispatch({ type: "signin", payload: token });
-    navigate("TrackList");
+    navigate("RecipeList");
   } else {
     navigate("Signup");
   }
@@ -32,13 +33,34 @@ const clearErrorMessage = (dispatch) => () => {
   dispatch({ type: "clear_error_message" });
 };
 
-const signup = (dispatch) => async ({ email, password }) => {
+const signup = (dispatch) => async ({ email, password, firstName , lastName }) => {
   try {
-    const response = await trackerApi.post("/signup", { email, password });
-    await AsyncStorage.setItem("token", response.data.token);
-    dispatch({ type: "signin", payload: response.data.token });
-
-    navigate("TrackList");
+    //const response = await trackerApi.post("/register", body);
+    console.log('sign up got call ');
+    const body = {
+      email: email,
+      password: password,
+      first_name: firstName,
+      last_name: lastName,
+      role: "admin",
+      securityQuestion: "What is your first car",
+      securityAnswer: "Honda"
+    }
+    Api()
+    .post("/register", body, {
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      console.log("response.data: ", response.data);
+      //saveAuthInfo(response.data.accessToken, response.data.refreshToken, response.data.user);
+    });
+    console.log('finish the sign up api call');
+    //await AsyncStorage.setItem("token", response.data.accessToken);
+    //dispatch({ type: "signin", payload: response.data.accessToken});
+    //console.log('finish the sign in method');
+    navigate("Signin");
   } catch (err) {
     dispatch({
       type: "add_error",
@@ -49,10 +71,32 @@ const signup = (dispatch) => async ({ email, password }) => {
 
 const signin = (dispatch) => async ({ email, password }) => {
   try {
-    const response = await trackerApi.post("/signin", { email, password });
-    await AsyncStorage.setItem("token", response.data.token);
-    dispatch({ type: "signin", payload: response.data.token });
-    navigate("TrackList");
+    console.log('inside call for signin');
+    console.log('print email', email);
+    const body = {
+      email: email,
+      password: password
+    }
+
+    Api()
+    .post("login", body, {
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      console.log("response.data: ", response.data);
+      //saveAuthInfo(response.data.accessToken, response.data.refreshToken, response.data.user);
+      // await AsyncStorage.setItem("token", response.data.accessToken);
+      // dispatch({ type: "signin", payload: response.data.accessToken});
+      navigate("RecipeList");
+    })
+    //const response = await trackerApi.post("/login", { email, password });
+    console.log('pass api call for signin');
+    await AsyncStorage.setItem("token", response.data.accessToken);
+    dispatch({ type: "signin", payload: response.data.accessToken});
+    navigate("RecipeList");
   } catch (err) {
     dispatch({
       type: "add_error",
