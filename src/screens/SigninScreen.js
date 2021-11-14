@@ -69,10 +69,6 @@ function SigninScreen({navigator}) {
           text="Dont have an account? Sign up"
           routeName="Signup"
         />
-        <NavLink
-          text="View Recipe UI For now"
-          routeName="RecipeList"
-        />
       </View>
       </ImageBackground>
     </View>
