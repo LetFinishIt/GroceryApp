@@ -31,7 +31,7 @@ function SigninScreen({navigator}) {
       saveAuthInfo(response.data.accessToken, response.data.refreshToken, response.data.user);
     })
     .catch((e) => {
-      console.log("e.response: ", e.response);
+      // console.log("e.response: ", e.response);
       console.log("e.message: ", e.message);
     });
   }
@@ -68,10 +68,6 @@ function SigninScreen({navigator}) {
         <NavLink
           text="Dont have an account? Sign up"
           routeName="Signup"
-        />
-        <NavLink
-          text="View Recipe UI For now"
-          routeName="RecipeList"
         />
       </View>
       </ImageBackground>

@@ -35,83 +35,33 @@ function RecipeDetails(props) {
         }
     )
     .then((response) => {
+        console.log()
         console.log("response.data: ", response.data);
-        setName(response.data.recipes[0].recipeName);
-        setImageUrl(response.data.recipes[0].recipePhoto);
-        setDescription(response.data.recipes[0].description);
-        setPrice(response.data.recipes[0].price);
+        setName(response.data.recipe.recipeName);
+        setImageUrl(response.data.recipe.recipePhoto);
+        setDescription(response.data.recipe.description);
+        setPrice(response.data.recipe.price);
         setIngredients(response.data.ingredients);
-        setRecipeItems(response.data.recipes[0].recipeItem);
-        // setRecipeItems([{
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },
-        //   {
-        //     _id: "6187c96bc1374c508f2ae429",
-        //     ingredients: "6185a67c255199bfff188da7",
-        //     itemQuantity: "2",
-        //   },]);
+        setRecipeItems(response.data.recipe.recipeItem);
     })
     .catch((e) => {
         console.log("e: ", e.message)
     });
     }, [])
+
+    const logInfo = () => {
+        console.log("name: ", name)
+        console.log("description: ", description)
+        console.log("imageUrl: ", imageUrl)
+        console.log("price: ", price)
+        console.log("ingredients: ", ingredients)
+        console.log("recipeItems: ", recipeItems)
+        recipeItems?.map((recipeItem, index) => {
+            let ingredient = ingredients?.find(ingredient => ingredient._id === recipeItem.ingredients)
+            console.log("")
+            console.log("ingredient?.name: ", ingredient?.ingredientName)
+        })
+    }
 
   return (
     <ImageBackground
@@ -137,15 +87,13 @@ function RecipeDetails(props) {
                     <SmallSpacer />
                     <View style={styles.ingredientContainer}>
                     {
-                        recipeItems.map((recipeItem, index) => {
-                            let ingredient = ingredients.find(ingredient => ingredient._id === recipeItem.ingredients)
+                        recipeItems?.map((recipeItem, index) => {
+                            let ingredient = ingredients?.find(ingredient => ingredient._id === recipeItem.ingredients)
                             return (
                                 <Text key={index} style={styles.text}>
                                     {recipeItem.itemQuantity}
                                     {" "}{ingredient?.unitType}
-                                    {/* {" "}LB */}
-                                    {" "}{ingredient?.name}
-                                    {/* {" "}{index == 1 ? "Flour" : "Tomato Sauce"} */}
+                                    {" "}{ingredient?.ingredientName}
                                 </Text>
                                 );
                         })
@@ -159,7 +107,7 @@ function RecipeDetails(props) {
                 <SmallSpacer />
                 <View style={styles.buttonContainer}>
                     <Button 
-                        onPress={() => navigate("RecipeList")} 
+                        onPress={() => logInfo()} 
                         title={"Edit"}
                         style={styles.button}
                     />
