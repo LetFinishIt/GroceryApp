@@ -38,18 +38,18 @@ const SelectedRecipes = ({ selectedRecipes, setSelectedRecipes }) => {
       onPress={() =>
         navigate("RecipeDetails", {recipeId: selectedRecipe.recipe._id})
       }>
-        <Card containerStyle={{borderRadius: 10, backgroundColor:'#dce2e3'}}>
+        <Card containerStyle={{borderRadius: 10, backgroundColor:'rgba(0,0,0,0.65)', borderColor: "rgba(0,0,0,0.65)"}}>
             <View style={{flexDirection: 'row'}}>
                 <Avatar  size="large" rounded source={{uri : selectedRecipe.recipe.recipePhoto}} />
             <View style={styles.recipeInfo}>
-                <Card.Title>{selectedRecipe.recipe.recipeName}</Card.Title>
+                <Card.Title style={{color: 'white'}}>{selectedRecipe.recipe.recipeName}</Card.Title>
                     <View style={{flexDirection: 'row'}}>
                         <View style={{flexDirection: 'row'}}>
                         <Button title={"-"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.button} onPress={() => decrementRecipe(selectedRecipe)}/>
-                        <Text style={{fontWeight: "bold" , color: '#ed288e', fontSize: 15, marginTop: 15 , marginLeft: 5, marginRight: 5}}>{selectedRecipe.quantity}</Text>
+                        <Text style={{fontWeight: "bold" , color: 'white', fontSize: 15, marginTop: 15 , marginLeft: 5, marginRight: 5}}>{selectedRecipe.quantity}</Text>
                         <Button title={"+"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.button} onPress={() => incrementRecipe(selectedRecipe)}/>    
                         </View>
-                        <Button title={"Remove"} buttonStyle={{backgroundColor: "rgba(255,0,0,0.65)"}} containerStyle={styles.newRecipeButton} onPress={() => removeRecipe(selectedRecipe)}/>
+                        <Button title={"Remove"} buttonStyle={{backgroundColor: "rgba(255,0,0,0.35)"}} containerStyle={styles.newRecipeButton} onPress={() => removeRecipe(selectedRecipe)}/>
                     </View>
                 </View>
             </View>
@@ -66,7 +66,7 @@ const SelectedRecipes = ({ selectedRecipes, setSelectedRecipes }) => {
       <ImageBackground source={require('../../assets/images/boards.png')} style={styles.container}>
         <View style={styles.settingBar}>
             <Button title={"Back"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.65)", paddingLeft: 10, paddingRight: 10,}} containerStyle={styles.settingsButton} onPress={() => navigate("RecipeList")}/>
-            <Button title={"Generate List"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.65)", paddingLeft: 10, paddingRight: 10,}} containerStyle={styles.settingsButton} onPress={() => console.log("selectedRecipes: ", selectedRecipes)}/>
+            <Button title={"Generate List"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.65)", paddingLeft: 10, paddingRight: 10,}} containerStyle={styles.settingsButton} onPress={() => navigate("GroceryList")}/>
         </View>
         <FlatList
             data={recipeList}
@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
   marginBottom: 10,
   marginRight: 10,
   marginLeft: 10,
-  backgroundColor: "rgba(0,0,0,0.65)",
  },
  container: {
   flex: 1,
@@ -123,6 +122,7 @@ newRecipeButton :{
   height: 40,
   width: 80,
   borderRadius: 10,
+  marginLeft: 20,
 },
 });
 

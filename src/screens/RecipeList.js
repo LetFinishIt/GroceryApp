@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, FlatList, TouchableOpacity,View, ImageBackground, Image , Switch} from "react-native";
+import { StyleSheet, Text, FlatList, TouchableOpacity, View, ImageBackground, Image , Switch} from "react-native";
 import Modal from "react-native-modal"; 
 import { NavigationEvents } from "react-navigation";
 import { Card, Icon, Avatar, Button, SearchBar , FAB} from "react-native-elements";
 import Api from '../api/apiInstance';
 import { ScrollView } from "react-native-gesture-handler";
-//import { Context as TrackContext } from "../context/TrackContext";
 import {navigate} from "../navigationRef";
 import { FontAwesome } from '@expo/vector-icons';
-// import * as SecureStore from 'expo-secure-store';
 import { connect } from 'react-redux';
+import { FontAwesome5 } from '@expo/vector-icons'; 
 
 const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
   //const { state, fetchTracks } = useContext(TrackContext);
@@ -101,7 +100,13 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
         onValueChange={(value) => setChecked(value)}
         />
         </View>
-        <Button title={"Cart"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => navigate("SelectedRecipes")}/>
+        {/* <Button title={"Cart"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => navigate("SelectedRecipes")}/> */}
+        <TouchableOpacity 
+          onPress={() => navigate("SelectedRecipes")}
+          style={styles.cartButton}
+        >
+          <FontAwesome5 name="shopping-cart" size={18} color="white" />
+        </TouchableOpacity>
         <Button title={"+"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => console.log('button press')}/>
       </View>
       <FlatList
@@ -136,6 +141,18 @@ const styles = StyleSheet.create({
   marginLeft: 20,
   marginRight: 20,
   marginBottom: 10,
+ },
+ cartButton :{
+  height: 40,
+  width: 40,
+  borderRadius: 40,
+  marginLeft: 20,
+  marginRight: 20,
+  marginBottom: 10,
+  paddingRight: 2,
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: "rgba(0,0,0,0.65)",
  },
  container: {
   flex: 1,
