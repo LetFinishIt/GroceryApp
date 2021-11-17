@@ -8,8 +8,10 @@ import { ScrollView } from "react-native-gesture-handler";
 //import { Context as TrackContext } from "../context/TrackContext";
 import {navigate} from "../navigationRef";
 import { FontAwesome } from '@expo/vector-icons';
+// import * as SecureStore from 'expo-secure-store';
+import { connect } from 'react-redux';
 
-const RecipeList = ({ navigation }) => {
+const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
   //const { state, fetchTracks } = useContext(TrackContext);
   const [recipeList, setRecipeList] = useState([]);
   const [checked, setChecked] = useState(false);
@@ -19,6 +21,23 @@ const RecipeList = ({ navigation }) => {
   const toggleSwitchElement = () => {
     setChecked(!checked);
   };
+  
+  const selectRecipe = (recipe) => {
+    let existingSelectedRecipe = selectedRecipes.find(selectedRecipe => selectedRecipe.recipe._id === recipe._id);
+    if (existingSelectedRecipe) {
+      existingSelectedRecipe.quantity ++;
+      let otherSelectedRecipes = selectedRecipes.filter(selectedRecipe => selectedRecipe.recipe._id !== recipe._id);
+      setSelectedRecipes([...otherSelectedRecipes, existingSelectedRecipe]);
+    }
+    else {
+      let newSelectedRecipe = {
+        recipe: recipe,
+        quantity: 1
+      }
+      setSelectedRecipes([...selectedRecipes, newSelectedRecipe])
+    }
+  }
+
   const RecipeCard = recipe => {
     return (
       <TouchableOpacity  
@@ -35,7 +54,7 @@ const RecipeList = ({ navigation }) => {
         <View style={{flexDirection: 'row'}}>
         <Icon name='pricetag-outline' type='ionicon' color='red'/>
         <Card.Title style={{color:'red'}}>{recipe.price}</Card.Title>
-        <Button title={"Add"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.newRecipeButton} onPress={() => console.log('button press',recipe._id)}/>
+        <Button title={"Add"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.newRecipeButton} onPress={() => selectRecipe(recipe)}/>
         </View>
         </View>
         </View>
@@ -82,6 +101,7 @@ const RecipeList = ({ navigation }) => {
         onValueChange={(value) => setChecked(value)}
         />
         </View>
+        <Button title={"Cart"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => navigate("SelectedRecipes")}/>
         <Button title={"+"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => console.log('button press')}/>
       </View>
       <FlatList
@@ -113,7 +133,8 @@ const styles = StyleSheet.create({
   height: 40,
   width: 40,
   borderRadius: 40,
-  marginLeft: 100,
+  marginLeft: 20,
+  marginRight: 20,
   marginBottom: 10,
  },
  container: {
@@ -151,4 +172,20 @@ newRecipeButton :{
 },
 });
 
-export default RecipeList;
+function mapStateToProps(state) {
+  return {
+    selectedRecipes: state.recipeItems.selectedRecipes,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setSelectedRecipes: (newSelectedRecipes) =>
+      dispatch({
+        type: 'SET_SELECTED_RECIPES',
+        newSelectedRecipes: newSelectedRecipes,
+      }),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeList);
+
