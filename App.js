@@ -23,6 +23,7 @@ import SigninScreen from './src/screens/SigninScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import RecipeList from './src/screens/RecipeList';
 import RecipeDetails from './src/screens/RecipeDetails';
+import SelectedRecipes from './src/screens/SelectedRecipes';
 import { Provider as AuthProvider } from './src/context/AuthContext';
 import { Provider } from 'react-redux';
 import { store } from './src/store';
@@ -49,6 +50,7 @@ const switchNavigator = createSwitchNavigator({
     Signup: SignupScreen,
     RecipeList: RecipeList,
     RecipeDetails,
+    SelectedRecipes
   }),
   // mainFlow: createBottomTabNavigator({
   //   trackListFlow,

@@ -101,7 +101,7 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
         onValueChange={(value) => setChecked(value)}
         />
         </View>
-        <Button title={"Cart"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => console.log("selectedRecipes: ", selectedRecipes)}/>
+        <Button title={"Cart"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => navigate("SelectedRecipes")}/>
         <Button title={"+"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => console.log('button press')}/>
       </View>
       <FlatList
