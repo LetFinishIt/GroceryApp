@@ -22,9 +22,20 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
     setChecked(!checked);
   };
   
-  const selectRecipe = async (recipe) => {
-    // await SecureStore.setItemAsync("selectedRecipes", [...SecureStore.getItemAsync("selectedRecipes"), recipe]);
-
+  const selectRecipe = (recipe) => {
+    let existingSelectedRecipe = selectedRecipes.find(selectedRecipe => selectedRecipe.recipe._id === recipe._id);
+    if (existingSelectedRecipe) {
+      existingSelectedRecipe.quantity ++;
+      let otherSelectedRecipes = selectedRecipes.filter(selectedRecipe => selectedRecipe.recipe._id !== recipe._id);
+      setSelectedRecipes([...otherSelectedRecipes, existingSelectedRecipe]);
+    }
+    else {
+      let newSelectedRecipe = {
+        recipe: recipe,
+        quantity: 1
+      }
+      setSelectedRecipes([...selectedRecipes, newSelectedRecipe])
+    }
   }
 
   const RecipeCard = recipe => {

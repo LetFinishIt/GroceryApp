@@ -6,7 +6,7 @@ const initialState = {
 const RecipeReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_SELECTED_RECIPES:
-            return { ...state, selectedRecipes: action.newSeletedRecipes };
+            return { ...state, selectedRecipes: action.newSelectedRecipes };
 
         default:
             return state;
