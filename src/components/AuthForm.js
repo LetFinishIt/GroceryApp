@@ -13,9 +13,9 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSign
     <KeyboardAvoidingView 
     style={styles.form}
     >
+      <Spacer />
       {isSignUp &&
       <>
-        <Spacer />
         <Input
           label="First Name"
           value={firstName}

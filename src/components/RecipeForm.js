@@ -25,6 +25,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
   const dropdownController = useRef(null)
   const searchRef = useRef(null)
   const [ingredientList, setIngredientList] = useState([]);
+  const [ingredientOptions, setIngredientOptions] = useState([]);
   //const [isChecked, setIsChecked] = useState(false)
 
   // Decrease Quantity for ingredients
@@ -86,25 +87,35 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
     );
 };
 
-  const getSuggestions = useCallback(async (q) => {
-    setLoading(true)
+  useEffect(() => {
     Api()
     .get("ingredients")
     .then((response) => {
       console.log(response.data.ingredients);
       console.log(typeof response.data.ingredients);
       const items = response.data.ingredients;
-      const suggestions = items.map((item) => ({
+      const ingredients = items.map((item) => ({
         ingredients: item._id,
         title: item.ingredientName,
         itemQuantity : 0,
-        key: item._id,
       }))
-      setSuggestionsList(suggestions)
-      console.log('print suggestion list',suggestionsList);
-      setLoading(false)
+      setIngredientOptions(ingredients);
     })
-}, []) 
+  }, [])
+
+  const handleSelectIngredient = (item) => {
+    console.log("handleSelectIngredient method running")
+    if (!ingredientList.some(existingItem => existingItem._id === item.id)) {
+      setSelectedItem(item); // can be removed?
+      setIngredientList([...ingredientList, item]);
+      const remainingIngredientOptions = ingredientOptions.filter(option => option._id !== item._id);
+      setIngredientOptions([...remainingIngredientOptions]);
+    }
+  }
+
+  useEffect(() => {
+    console.log("ingredientList: ", ingredientList);
+  }, [ingredientList])
 
   return (
   <ImageBackground
@@ -154,30 +165,26 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
       />
     <AutocompleteDropdown
         ref={searchRef}
-        controller={(controller) => {
-          dropdownController.current = controller
-        }}
-        dataSet={suggestionsList}
-        onChangeText={getSuggestions}
+        bottomOffset={40}
+        clearOnFocus={true}
+        closeOnBlur={true}
+        closeOnSubmit={false}
+        dataSet={ingredientOptions}
         onSelectItem={(item) => {
-          item && setSelectedItem(item.ingredients);
-          setIngredientList([...ingredientList,item]);
+          handleSelectIngredient(item);
         }}
-        debounce={600}
+        onSubmit={(item) => {
+          handleSelectIngredient(item);
+        }}
         suggestionsListMaxHeight={Dimensions.get("window").height * 0.4}
-      // onClear={onClearPress}
-        //  onSubmit={(e) => onSubmitSearch(e.nativeEvent.text)}
-      // onOpenSuggestionsList={onOpenSuggestionsList}
-        loading={loading}
-        useFilter={true} // prevent rerender twice
         textInputProps={{
           placeholder: "Type your ingredients",
-          autoCorrect: false,
+          autoCorrect: true,
           autoCapitalize: "none",
           style: {
             borderRadius: 25,
             backgroundColor: "#383b42",
-            color: "#fff",
+            color: "white",
             paddingLeft: 18
           }
         }}
@@ -186,30 +193,31 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
           right: 8,
           height: 30,
           top: 10,
+          paddingLeft: 7,
           alignSelfs: "center",
           backgroundColor: "#383b42"
         }}
-        inputContainerStyle={{
-          backgroundColor: "transparent"
-        }}
+        // inputContainerStyle={{
+        //   backgroundColor: "transparent"
+        // }}
         suggestionsListContainerStyle={{
-          backgroundColor: "#383b42"
+          backgroundColor: "#383b42",
         }}
-        containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-        renderItem={(item, text) => (
-          <Text style={{ color: "#fff", padding: 15 }}>{item.title}</Text>
-        )}
-        ChevronIconComponent={
-          <Feather name="x-circle" size={18} color="#fff" />
-        }
-        ClearIconComponent={
-          <Feather name="chevron-down" size={20} color="#fff" />
-        }
+        // containerStyle={{ flexGrow: 1, flexShrink: 1 }}
+        // renderItem={(item, text) => (
+        //   <Text style={{ color: "#fff", padding: 15 }}>{item.title}</Text>
+        // )}
+        // ChevronIconComponent={
+        //   <Feather name="x-circle" size={18} color="#fff" />
+        // }
+        // ClearIconComponent={
+        //   <Feather name="chevron-down" size={20} color="#fff" />
+        // }
         inputHeight={50}
-        showChevron={false}
-        //  showClear={false}
-      />
-      {ingredientList && ingredientList.length > 1
+        // showChevron={false}
+         showClear={false}
+        />
+      {ingredientList && ingredientList.length > 0
         &&
         <FlatList
         style={styles.flatList}
@@ -219,14 +227,15 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
         />}
         {errorMessage ? (
           <Text style={styles.errorMessage}>{errorMessage}</Text>
-        ) : null}
+          ) : null}
         <Spacer>
           <Button
             title={submitButtonText}
             onPress={() => onSubmit(recipeName, price, description, photo,  ingredientList.filter(i => i !== null ))}
-          />
+            style={styles.createButton}
+            />
         </Spacer>
-      </KeyboardAwareScrollView>
+        </KeyboardAwareScrollView>
       </View>
     </ImageBackground>
   );
@@ -246,6 +255,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     marginTop: 15,
     width: "100%",
+    height: "100%",
   },
   label: {
     color: "white",
@@ -312,6 +322,10 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 20,
     marginBottom: 20,
+  },
+  createButton: {
+    position: "absolute",
+    bottom: 0,
   },
 });
 
