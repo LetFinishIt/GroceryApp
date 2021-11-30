@@ -7,6 +7,7 @@ import NavLink from '../components/NavLink';
 import Api from '../api/apiInstance';
 import * as SecureStore from 'expo-secure-store';
 import {navigate} from "../navigationRef";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 function SigninScreen({navigator}) {
   //const { state, signin, clearErrorMessage } = useContext(Context);
@@ -58,6 +59,7 @@ function SigninScreen({navigator}) {
           resizeMode="cover"
           style={styles.container}
       >
+        <KeyboardAwareScrollView>
       <AuthForm
         //headerText="Sign In to Your Account"
         // errorMessage={state.errorMessage}
@@ -74,6 +76,7 @@ function SigninScreen({navigator}) {
           routeName="RecipeList"
         />
       </View>
+      </KeyboardAwareScrollView>
       </ImageBackground>
     </View>
   );
@@ -87,6 +90,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    height: "100%",
+    paddingTop: 15,
+    paddingBottom: 15,
   },
   linkContainer: {
     alignItems: 'center',

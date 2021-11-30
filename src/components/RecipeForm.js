@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { KeyboardAvoidingView, StyleSheet, View ,  SafeAreaView,TouchableOpacity, FlatList,Dimensions} from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, View ,  SafeAreaView,TouchableOpacity, FlatList,Dimensions, ImageBackground} from 'react-native';
 import { Text, Button, Input, Card } from 'react-native-elements';
 import Spacer from './Spacer';
 import {Picker} from '@react-native-picker/picker';
@@ -8,6 +8,7 @@ import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import { Feather } from '@expo/vector-icons';
 import Api from '../api/apiInstance';
 import { ScrollView } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSignUp = false }) => {
@@ -24,6 +25,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
   const dropdownController = useRef(null)
   const searchRef = useRef(null)
   const [ingredientList, setIngredientList] = useState([]);
+  const [ingredientOptions, setIngredientOptions] = useState([]);
   //const [isChecked, setIsChecked] = useState(false)
 
   // Decrease Quantity for ingredients
@@ -67,66 +69,83 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
             <View style={styles.cardSubContainer}>
             <Text style={styles.cardText}>{ingredient.title}</Text>
             <View style={{flexDirection: 'row'}}>
-                        <View style={{flexDirection: 'row'}}>
-                        <Button title={"-"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.button} 
-                        onPress={() => decrementQuantity(ingredient)}
-                        />
-                        <Text style={{fontWeight: "bold" , color: 'white', fontSize: 15, marginTop: 15 , marginLeft: 5, marginRight: 5}}>{ingredient.itemQuantity}</Text>
-                        <Button title={"+"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.button} 
-                        onPress={() => incrementQuantity(ingredient)}
-                        />    
-                        </View>
-                        <Button title={"Remove"} buttonStyle={{backgroundColor: "rgba(255,0,0,0.35)"}} containerStyle={styles.newRecipeButton}
-                        onPress={() => removeSelectedIngredients(ingredient)}
-                         />
-                    </View>
+              <View style={{flexDirection: 'row'}}>
+                <Button title={"-"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.button} 
+                onPress={() => decrementQuantity(ingredient)}
+                />
+                <Text style={{fontWeight: "bold" , color: 'white', fontSize: 15, marginTop: 15 , marginLeft: 5, marginRight: 5}}>{ingredient.itemQuantity}</Text>
+                <Button title={"+"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.button} 
+                onPress={() => incrementQuantity(ingredient)}
+                />    
+                </View>
+                <Button title={"Remove"} buttonStyle={{backgroundColor: "rgba(255,0,0,0.35)"}} containerStyle={styles.newRecipeButton}
+                onPress={() => removeSelectedIngredients(ingredient)}
+                  />
+              </View>
             </View>
         </Card>
     );
 };
 
-  const getSuggestions = useCallback(async (q) => {
-    setLoading(true)
+  useEffect(() => {
     Api()
     .get("ingredients")
     .then((response) => {
       console.log(response.data.ingredients);
       console.log(typeof response.data.ingredients);
       const items = response.data.ingredients;
-      const suggestions = items.map((item) => ({
+      const ingredients = items.map((item) => ({
         ingredients: item._id,
         title: item.ingredientName,
-        itemQuantity : 0
+        itemQuantity : 0,
       }))
-      setSuggestionsList(suggestions)
-      console.log('print suggestion list',suggestionsList);
-      setLoading(false)
+      setIngredientOptions(ingredients);
     })
-}, []) 
+  }, [])
+
+  const handleSelectIngredient = (item) => {
+    console.log("handleSelectIngredient method running")
+    if (!ingredientList.some(existingItem => existingItem._id === item.id)) {
+      setSelectedItem(item); // can be removed?
+      setIngredientList([...ingredientList, item]);
+      const remainingIngredientOptions = ingredientOptions.filter(option => option._id !== item._id);
+      setIngredientOptions([...remainingIngredientOptions]);
+    }
+  }
+
+  useEffect(() => {
+    console.log("ingredientList: ", ingredientList);
+  }, [ingredientList])
 
   return (
-    <KeyboardAvoidingView 
+  <ImageBackground
+      source={require('../../assets/images/boards.png')}
+      resizeMode="cover"
+      style={styles.container}
+    >
+      <View style={styles.subContainer}>
+    <KeyboardAwareScrollView 
     style={styles.form}
     >
-        <Input
-          label="Recipe Name"
-          value={recipeName}
-          onChangeText={setRecipeName}
-          autoCapitalize="none"
-          autoCorrect={false}
-          labelStyle={styles.label}
-          inputStyle={styles.input}
-        />
-        <Input
-          label="Description"
-          value={description}
-          onChangeText={setDescription}
-          autoCapitalize="none"
-          autoCorrect={false}
-          labelStyle={styles.label}
-          inputStyle={styles.input}
-        />
-        <Input
+      <Input
+        label="Recipe Name"
+        value={recipeName}
+        onChangeText={setRecipeName}
+        autoCapitalize="none"
+        autoCorrect={false}
+        labelStyle={styles.label}
+        inputStyle={styles.input}
+      />
+      <Input
+        label="Description"
+        value={description}
+        onChangeText={setDescription}
+        autoCapitalize="none"
+        autoCorrect={false}
+        labelStyle={styles.label}
+        inputStyle={styles.input}
+      />
+      <Input
         label="Photo"
         value={photo}
         onChangeText={setPhoto}
@@ -144,83 +163,81 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
         labelStyle={styles.label}
         inputStyle={styles.input}
       />
-      <AutocompleteDropdown
-          ref={searchRef}
-          controller={(controller) => {
-            dropdownController.current = controller
-          }}
-          dataSet={suggestionsList}
-          onChangeText={getSuggestions}
-          onSelectItem={(item) => {
-            item && setSelectedItem(item.ingredients);
-            setIngredientList([...ingredientList,item]);
-          }}
-          debounce={600}
-          suggestionsListMaxHeight={Dimensions.get("window").height * 0.4}
-         // onClear={onClearPress}
-          //  onSubmit={(e) => onSubmitSearch(e.nativeEvent.text)}
-         // onOpenSuggestionsList={onOpenSuggestionsList}
-          loading={loading}
-          useFilter={false} // prevent rerender twice
-          textInputProps={{
-            placeholder: "Type your ingredients",
-            autoCorrect: false,
-            autoCapitalize: "none",
-            style: {
-              borderRadius: 25,
-              backgroundColor: "#383b42",
-              color: "#fff",
-              paddingLeft: 18
-            }
-          }}
-          rightButtonsContainerStyle={{
+    <AutocompleteDropdown
+        ref={searchRef}
+        bottomOffset={40}
+        clearOnFocus={true}
+        closeOnBlur={true}
+        closeOnSubmit={false}
+        dataSet={ingredientOptions}
+        onSelectItem={(item) => {
+          handleSelectIngredient(item);
+        }}
+        onSubmit={(item) => {
+          handleSelectIngredient(item);
+        }}
+        suggestionsListMaxHeight={Dimensions.get("window").height * 0.4}
+        textInputProps={{
+          placeholder: "Type your ingredients",
+          autoCorrect: true,
+          autoCapitalize: "none",
+          style: {
             borderRadius: 25,
-            right: 8,
-            height: 30,
-            top: 10,
-            alignSelfs: "center",
-            backgroundColor: "#383b42"
-          }}
-          inputContainerStyle={{
-            backgroundColor: "transparent"
-          }}
-          suggestionsListContainerStyle={{
-            backgroundColor: "#383b42"
-          }}
-          containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-          renderItem={(item, text) => (
-            <Text style={{ color: "#fff", padding: 15 }}>{item.title}</Text>
-          )}
-          ChevronIconComponent={
-            <Feather name="x-circle" size={18} color="#fff" />
+            backgroundColor: "#383b42",
+            color: "white",
+            paddingLeft: 18
           }
-          ClearIconComponent={
-            <Feather name="chevron-down" size={20} color="#fff" />
-          }
-          inputHeight={50}
-          showChevron={false}
-          //  showClear={false}
+        }}
+        rightButtonsContainerStyle={{
+          borderRadius: 25,
+          right: 8,
+          height: 30,
+          top: 10,
+          paddingLeft: 7,
+          alignSelfs: "center",
+          backgroundColor: "#383b42"
+        }}
+        // inputContainerStyle={{
+        //   backgroundColor: "transparent"
+        // }}
+        suggestionsListContainerStyle={{
+          backgroundColor: "#383b42",
+        }}
+        // containerStyle={{ flexGrow: 1, flexShrink: 1 }}
+        // renderItem={(item, text) => (
+        //   <Text style={{ color: "#fff", padding: 15 }}>{item.title}</Text>
+        // )}
+        // ChevronIconComponent={
+        //   <Feather name="x-circle" size={18} color="#fff" />
+        // }
+        // ClearIconComponent={
+        //   <Feather name="chevron-down" size={20} color="#fff" />
+        // }
+        inputHeight={50}
+        // showChevron={false}
+         showClear={false}
         />
-        {
-          ingredientList && ingredientList.length>1
-          &&
-          <FlatList
-          style={styles.flatList}
-          data={ingredientList.filter(i => i !== null)}
-          keyExtractor={(item) => item.ingredients}
-          renderItem={({ item }) => IngredientCard(item)}
-          />
-        }
-      {errorMessage ? (
-        <Text style={styles.errorMessage}>{errorMessage}</Text>
-      ) : null}
-      <Spacer>
-        <Button
-          title={submitButtonText}
-          onPress={() => onSubmit(recipeName, price, description, photo,  ingredientList.filter(i => i !== null ))}
-        />
-      </Spacer>
-    </KeyboardAvoidingView>
+      {ingredientList && ingredientList.length > 0
+        &&
+        <FlatList
+        style={styles.flatList}
+        data={ingredientList.filter(i => i !== null)}
+        keyExtractor={(item) => item.ingredients}
+        renderItem={({ item }) => IngredientCard(item)}
+        />}
+        {errorMessage ? (
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+          ) : null}
+        <Spacer>
+          <Button
+            title={submitButtonText}
+            onPress={() => onSubmit(recipeName, price, description, photo,  ingredientList.filter(i => i !== null ))}
+            style={styles.createButton}
+            />
+        </Spacer>
+        </KeyboardAwareScrollView>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -232,21 +249,19 @@ const styles = StyleSheet.create({
     marginTop: 15
   },
   form: {
-    justifyContent: 'center',
     marginLeft: 15,
     marginRight: 15,
     paddingLeft: 10,
     paddingRight: 10,
     marginTop: 15,
-    backgroundColor: "rgba(0,0,0,0.65)",
-    borderRadius: 10
+    width: "100%",
+    height: "100%",
   },
   label: {
     color: "white",
   },
   flatList: {
     color: "white",
-    height: 300,
   },
   input: {
     color: "white",
@@ -290,7 +305,28 @@ const styles = StyleSheet.create({
   width: 80,
   borderRadius: 10,
   marginLeft: 20,
-},
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: "center",
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  subContainer: {
+    backgroundColor: 'rgba(0,0,0,0.65)',
+    width: "90%",
+    height: "100%",
+    borderRadius: 10,
+    alignItems: "center",
+    padding: 10,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  createButton: {
+    position: "absolute",
+    bottom: 0,
+  },
 });
 
 export default RecipeForm;
