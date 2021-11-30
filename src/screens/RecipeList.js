@@ -107,7 +107,7 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
         >
           <FontAwesome5 name="shopping-cart" size={18} color="white" />
         </TouchableOpacity>
-        <Button title={"+"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => console.log('button press')}/>
+        <Button title={"+"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => navigate("AddRecipes")}/>
       </View>
       <FlatList
         data={recipeList}

@@ -25,6 +25,7 @@ import RecipeList from './src/screens/RecipeList';
 import RecipeDetails from './src/screens/RecipeDetails';
 import SelectedRecipes from './src/screens/SelectedRecipes';
 import GroceryList from './src/screens/GroceryList';
+import AddRecipes from './src/screens/AddRecipes';
 import { Provider as AuthProvider } from './src/context/AuthContext';
 import { Provider } from 'react-redux';
 import { store } from './src/store';
@@ -53,6 +54,7 @@ const switchNavigator = createSwitchNavigator({
     RecipeDetails,
     SelectedRecipes,
     GroceryList,
+    AddRecipes,
   }),
   // mainFlow: createBottomTabNavigator({
   //   trackListFlow,
