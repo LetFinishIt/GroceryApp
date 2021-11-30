@@ -12,8 +12,6 @@ function SigninScreen({navigator}) {
   //const { state, signin, clearErrorMessage } = useContext(Context);
   
   const handleLogin = async (email, password) => {
-    console.log("email: ", email);
-    console.log("password: ", password);
     const body = {
       email: email,
       password: password
@@ -27,7 +25,7 @@ function SigninScreen({navigator}) {
       },
     })
     .then((response) => {
-      //console.log("response.data: ", response.data);
+      console.log("response.data: ", response.data.user);
       saveAuthInfo(response.data.accessToken, response.data.refreshToken, response.data.user);
     })
     .catch((e) => {
@@ -42,11 +40,13 @@ function SigninScreen({navigator}) {
     await SecureStore.setItemAsync("firstName", user.firstName);
     await SecureStore.setItemAsync("lastName", user.last_name);
     await SecureStore.setItemAsync("email", user.email);
+    await SecureStore.setItemAsync("userId", user._id);
     console.log("await SecureStore.getItemAsync('accessToken'): ", await SecureStore.getItemAsync("accessToken"))
     console.log("await SecureStore.getItemAsync('refreshToken'): ", await SecureStore.getItemAsync("refreshToken"))
     console.log("await SecureStore.getItemAsync('firstName'): ", await SecureStore.getItemAsync("firstName"))
     console.log("await SecureStore.getItemAsync('lastName'): ", await SecureStore.getItemAsync("lastName"))
     console.log("await SecureStore.getItemAsync('email'): ", await SecureStore.getItemAsync("email"))
+    console.log("await SecureStore.getItemAsync('userId'): ", await SecureStore.getItemAsync("userId"))
     navigate("RecipeList");
   }
 

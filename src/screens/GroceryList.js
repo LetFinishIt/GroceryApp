@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, FlatList, View, ImageBackground, Switch} from "react-native";
+import { ActivityIndicator, StyleSheet, Text, FlatList, View, ImageBackground,   RefreshControl} from "react-native";
 import { Card, Button, } from "react-native-elements";
 import Api from '../api/apiInstance';
 import {navigate} from "../navigationRef";
@@ -9,6 +9,7 @@ import CheckBox from 'expo-checkbox';
 const GroceryList = ({ selectedRecipes }) => {
     const [ingredientList, setIngredientList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
     const IngredientCard = (ingredient) => {
         return (
@@ -39,6 +40,22 @@ const GroceryList = ({ selectedRecipes }) => {
       loadAllIngredients();
   }, []);
 
+  // Refreshing 
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    Api()
+    .get("ingredients")
+    .then((response) => {
+        loadIngredientList(response.data.ingredients);
+        setRefreshing(false);
+    })
+    .catch((e) => {
+      console.log("e.response: ", e.response);
+      console.log("e.message: ", e.message);
+    });
+  }, []);
+
+  // load all ingredients
   const loadAllIngredients = () => {
     Api()
     .get("ingredients")
@@ -94,6 +111,15 @@ const GroceryList = ({ selectedRecipes }) => {
         <FlatList
             data={ingredientList}
             keyExtractor={(item) => item._id}
+            // onRefresh={onRefresh}
+            // refreshing={refreshing}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} 
+              onRefresh={() => {
+                //fetch data here
+                console.log("refreshing");      
+               }} />
+            }
             renderItem={({ item }) => IngredientCard(item)}
         />
       </ImageBackground>
