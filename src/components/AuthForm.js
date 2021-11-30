@@ -35,7 +35,6 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSign
           inputStyle={styles.input}
         />
       </>}
-      <Spacer/>
       <Input
         label="Email"
         value={email}

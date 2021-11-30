@@ -5,6 +5,7 @@ import { Context as AuthContext } from '../context/AuthContext';
 import AuthForm from '../components/AuthForm';
 import NavLink from '../components/NavLink';
 import Api from '../api/apiInstance';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const SignupScreen = ({ navigation }) => {
   const { state, signup, clearErrorMessage } = useContext(AuthContext);
@@ -17,6 +18,7 @@ const SignupScreen = ({ navigation }) => {
           resizeMode="cover"
           style={styles.container}
       >
+        <KeyboardAwareScrollView>
         <AuthForm
           //headerText="Sign Up for GroList"
           // errorMessage={state.errorMessage}
@@ -30,6 +32,7 @@ const SignupScreen = ({ navigation }) => {
             text="Already have an account? Sign in instead!"
           />
         </View>
+        </KeyboardAwareScrollView>
       </ImageBackground>
     </View>
   );
@@ -45,6 +48,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    paddingTop: 15,
+    paddingBottom: 15,
   },
   logoImage: {
     height: 200,
