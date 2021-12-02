@@ -104,26 +104,30 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
   }, [])
 
   const handleSelectIngredient = (item) => {
-    console.log("handleSelectIngredient method running")
-    if (!ingredientList.some(existingItem => existingItem._id === item.id)) {
-      setSelectedItem(item); // can be removed?
-      setIngredientList([...ingredientList, item]);
-      const remainingIngredientOptions = ingredientOptions.filter(option => option._id !== item._id);
-      setIngredientOptions([...remainingIngredientOptions]);
+    if (ingredientList.length <= 1) {
+      if(!ingredientList.filter(i => i !== null).some(existingItem => existingItem._id === item.id)) {
+      console.log('print ingredient list', ingredientList);
+      setIngredientList([...ingredientList,item]);
+      }
+    }
+    else{
+      console.log('running again');
+      if(ingredientList.filter(i => i !== null).some(existingItem => existingItem._id === item.id)) {
+        console.log('print ingredient list', ingredientList);
+        setIngredientList([...ingredientList,item]);
+        }
+      // I comment out since i do not see the effect of below code toward your function but feel free to uncomment it 
+      //const remainingIngredientOptions = ingredientOptions.filter(option => option._id !== item._id);
+      //setIngredientOptions([...remainingIngredientOptions]);
+      //console.log('print remaining Ingredient Options',remainingIngredientOptions);
     }
   }
 
   useEffect(() => {
-    console.log("ingredientList: ", ingredientList);
+    //console.log("ingredientList: ", ingredientList);
   }, [ingredientList])
 
   return (
-  <ImageBackground
-      source={require('../../assets/images/boards.png')}
-      resizeMode="cover"
-      style={styles.container}
-    >
-      <View style={styles.subContainer}>
     <KeyboardAwareScrollView 
     style={styles.form}
     >
@@ -165,17 +169,21 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
       />
     <AutocompleteDropdown
         ref={searchRef}
+        controller={(controller) => {
+          dropdownController.current = controller
+        }}
         bottomOffset={40}
         clearOnFocus={true}
         closeOnBlur={true}
         closeOnSubmit={false}
         dataSet={ingredientOptions}
         onSelectItem={(item) => {
+          //console.log('print out the select item', item);
           handleSelectIngredient(item);
         }}
-        onSubmit={(item) => {
-          handleSelectIngredient(item);
-        }}
+        // onSubmit={(item) => {
+        //   handleSelectIngredient(item);
+        // }}
         suggestionsListMaxHeight={Dimensions.get("window").height * 0.4}
         textInputProps={{
           placeholder: "Type your ingredients",
@@ -184,7 +192,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
           style: {
             borderRadius: 25,
             backgroundColor: "#383b42",
-            color: "white",
+            color: "#fff",
             paddingLeft: 18
           }
         }}
@@ -236,8 +244,6 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
             />
         </Spacer>
         </KeyboardAwareScrollView>
-      </View>
-    </ImageBackground>
   );
 };
 
