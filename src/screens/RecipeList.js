@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, FlatList, TouchableOpacity, View, ImageBackground, Image , Switch} from "react-native";
+import { StyleSheet, Text, FlatList, TouchableOpacity, View, ImageBackground, Image , Switch,  RefreshControl} from "react-native";
 import Modal from "react-native-modal"; 
 import { NavigationEvents } from "react-navigation";
 import { Card, Icon, Avatar, Button, SearchBar , FAB} from "react-native-elements";
@@ -15,6 +15,7 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
   const [recipeList, setRecipeList] = useState([]);
   const [checked, setChecked] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const toggleSwitchReact = () => setIsEnabled(previousState => !previousState);
   const toggleSwitchElement = () => {
@@ -82,6 +83,13 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
     displayRecipe();
   },[]);
 
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    displayRecipe();
+    setRefreshing(false);
+  }, []);
+
+
   return (
       <ImageBackground source={require('../../assets/images/boards.png')} style={styles.container}>
       <SearchBar
@@ -112,6 +120,13 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
       <FlatList
         data={recipeList}
         keyExtractor={(item) => item._id}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} 
+          onRefresh={() => {
+            //fetch data here
+            onRefresh();      
+           }} />
+        }
         renderItem={({ item }) => RecipeCard(item)}
       />
       </ImageBackground>
