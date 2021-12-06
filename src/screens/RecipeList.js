@@ -48,7 +48,10 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
       }>
       <Card containerStyle={{borderRadius: 10, backgroundColor:'#dce2e3'}}>
         <View style={{flexDirection: 'row'}}>
-        <Avatar  size="large" rounded source={{uri : recipe.recipePhoto}} />
+        <Avatar  size="large" rounded 
+          source={recipe.recipePhoto ? 
+            {uri : recipe.recipePhoto} : 
+            {uri : "https://www.thefrenchcookingacademy.com/wp-content/themes/neptune-by-osetin/assets/img/placeholder.jpg"}} />
         <View style={styles.recipeInfo}>
         <Card.Title>{recipe.recipeName}</Card.Title>
         <View style={{flexDirection: 'row'}}>
@@ -68,10 +71,7 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
     Api()
     .get("allRecipes")
     .then((response) => {
-      //console.log("response.data: ", response.data.recipes);
-      //console.log("response with recipes: ", response.data);
       setRecipeList(response.data.recipes);
-      //saveAuthInfo(response.data.accessToken, response.data.refreshToken, response.data.user);
     })
     .catch((e) => {
       console.log("e.response: ", e.response);

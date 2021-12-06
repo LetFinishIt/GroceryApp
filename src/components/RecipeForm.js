@@ -10,6 +10,7 @@ import Api from '../api/apiInstance';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import CreateIngredientModal from './CreateIngredientModal';
+import DeleteIngredientModal from './DeleteIngredientModal';
 
 
 const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSignUp = false }) => {
@@ -29,6 +30,9 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
   const [ingredientOptions, setIngredientOptions] = useState([]);
   //const [isChecked, setIsChecked] = useState(false)
   const [openIngredientModal, setOpenIngredientModal] = useState(false);
+  const [deleteIngId, setDeleteIngId] = useState("");
+  const [deleteIngTitle, setDeleteIngTitle] = useState("");
+  const [searchValue, setSearchValue] = useState("");
 
   // Decrease Quantity for ingredients
   const decrementQuantity = (clickedIngredients) => {
@@ -75,7 +79,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
                 <Button title={"-"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.button} 
                 onPress={() => decrementQuantity(ingredient)}
                 />
-                <Text style={{fontWeight: "bold" , color: 'white', fontSize: 15, marginTop: 15 , marginLeft: 5, marginRight: 5}}>{ingredient.itemQuantity}</Text>
+                <Text style={{fontWeight: "bold" , color: 'white', fontSize: 15, marginTop: 10, marginLeft: 5, marginRight: 5}}>{ingredient.itemQuantity}</Text>
                 <Button title={"+"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.button} 
                 onPress={() => incrementQuantity(ingredient)}
                 />    
@@ -127,6 +131,12 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
       //setIngredientOptions([...remainingIngredientOptions]);
       //console.log('print remaining Ingredient Options',remainingIngredientOptions);
     }
+    setSearchValue("");
+  }
+
+  const onClickDelete = (itemTitle, itemId) => {
+    setDeleteIngTitle(itemTitle)
+    setDeleteIngId(itemId)
   }
 
   return (
@@ -137,6 +147,13 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
     <CreateIngredientModal
         onCancel={() => { setOpenIngredientModal(false) }}
         isVisible={openIngredientModal}
+        reloadOptions={() => loadOptions()}
+    />
+    <DeleteIngredientModal
+        onCancel={() => { (setDeleteIngId(""), setDeleteIngTitle("")) }}
+        isVisible={deleteIngId}
+        ingredientId={deleteIngId}
+        ingredientTitle={deleteIngTitle}
         reloadOptions={() => loadOptions()}
     />
       <Input
@@ -177,13 +194,16 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
       />
       <View style={{width: "90%", marginLeft: "auto", marginRight: "auto", display: "flex", flexDirection: "row", alignItems: "center"}}>
         <View style={{width: "90%"}}>
-        <AutocompleteDropdown
+        {deleteIngId === "" && !openIngredientModal &&
+          <AutocompleteDropdown
             ref={searchRef}
             controller={(controller) => {
               dropdownController.current = controller
             }}
             bottomOffset={40}
             clearOnFocus={true}
+            value={searchValue}
+            onChangeText={setSearchValue}
             closeOnBlur={true}
             closeOnSubmit={false}
             dataSet={ingredientOptions}
@@ -222,9 +242,19 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
               backgroundColor: "#383b42",
             }}
             // containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-            // renderItem={(item, text) => (
-            //   <Text style={{ color: "#fff", padding: 15 }}>{item.title}</Text>
-            // )}
+            renderItem={(item, text) => (
+              
+              <View style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
+              {item.title.toLowerCase().includes(searchValue.toLowerCase()) &&
+              <>
+                <Text style={{ color: "#fff", padding: 15 }}>{item.title}</Text>
+                <Button title={"X"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.deleteIngredientButton} 
+                onPress={() => onClickDelete(item.title, item.ingredients)}
+                />
+              </>
+              }
+                </View>
+            )}
             // ChevronIconComponent={
             //   <Feather name="x-circle" size={18} color="#fff" />
             // }
@@ -234,7 +264,8 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
             inputHeight={50}
             // showChevron={false}
             showClear={false}
-            />
+            rightTextExtractor={"test"}
+            />}
             </View>
             <Button title={"+"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.newIngredientButton} 
               onPress={() => setOpenIngredientModal(true)}
@@ -311,6 +342,7 @@ const styles = StyleSheet.create({
     fontSize: 18, 
     marginLeft: 5, 
     marginRight: 5,
+    marginBottom: 10,
     alignSelf: "center",
     textAlign: "center",
     textAlignVertical: "center",
@@ -334,6 +366,15 @@ const styles = StyleSheet.create({
   marginLeft: 10,
   marginTop: 10,
   backgroundColor: "rgba(0,0,0,0.65)",
+ },
+ deleteIngredientButton :{
+  height: 40,
+  minWidth: 40,
+  maxWidth: 40,
+  borderRadius: 40,
+  marginRight: 10,
+  marginLeft: 10,
+  backgroundColor: "rgba(255,0,0,0.65)",
  },
  newRecipeButton :{
   height: 40,
