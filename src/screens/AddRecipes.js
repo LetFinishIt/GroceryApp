@@ -13,23 +13,26 @@ const AddRecipes = ({ navigation }) => {
   const { state, signup, clearErrorMessage } = useContext(AuthContext);
 
   const AddNewRecipes =  async (recipeName, price, description, photo, ingredientList)=>{
-    const body = {
-      recipeName: recipeName,
-      description: description, 
-      price : price,
-      recipePhoto: photo,
-      recipeItem: ingredientList,
-      isPrivate: false,
-      user:  await SecureStore.getItemAsync("userId"),
+    if (recipeName && description && ingredientList.length > 0) {
+      const body = {
+        recipeName: recipeName,
+        description: description, 
+        price : price,
+        recipePhoto: photo,
+        recipeItem: ingredientList,
+        isPrivate: false,
+        user:  await SecureStore.getItemAsync("userId"),
+      }
+      
+      
+      Api().post("recipe" , body).then((response)=>{
+        console.log("response.data: ", response.data);
+        navigate("RecipeList");
+      }).catch((e) => {
+        // console.log("e.response: ", e.response);
+        console.log("e.message: ", e.message);
+      });
     }
-
-
-   Api().post("recipe" , body).then((response)=>{
-      console.log("response.data: ", response.data);
-   }).catch((e) => {
-    // console.log("e.response: ", e.response);
-    console.log("e.message: ", e.message);
-    });
   };
 
   return (
@@ -46,7 +49,6 @@ const AddRecipes = ({ navigation }) => {
           submitButtonText="Create"
           onSubmit={(recipeName, price, description, recipeItem, photo, ingredientList)=>
             { AddNewRecipes(recipeName, price, description, recipeItem , photo, ingredientList);
-              navigate("RecipeList");
             }}
         />
       </ImageBackground>
