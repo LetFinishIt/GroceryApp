@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, View, StyleSheet, Text, ImageBackground, Modal } from 'react-native';
+import { ScrollView, View, StyleSheet, Text, ImageBackground, Modal, TouchableOpacity , Alert} from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import NavLink from '../components/NavLink';
 import Api from '../api/apiInstance';
@@ -9,6 +9,8 @@ import { ButtonGroup } from 'react-native-elements/dist/buttons/ButtonGroup';
 import { navigate } from '../navigationRef';
 import Spacer from '../components/Spacer';
 import SmallSpacer from '../components/SmallSpacer';
+import { FontAwesome5 } from '@expo/vector-icons'; 
+
 
 function RecipeDetails(props) {
     const { navigation } = props;
@@ -21,9 +23,17 @@ function RecipeDetails(props) {
     const [ingredients, setIngredients] = useState([]);
     const [imageUrl, setImageUrl] = useState(null);
     const [recipeItems, setRecipeItems] = useState([]);
+    const [recipeOwnerId, setRecipeOwnerId] = useState([]);
+    const [currentUserId,setCurrentUserId]= useState();
+
+    const getCurrentUserId =  async() => {
+        setCurrentUserId( await SecureStore.getItemAsync("userId"));
+    } 
 
     useEffect(() => {
     console.log("recipeId: ", recipeId);
+    //get current user id
+    getCurrentUserId();
     Api()
     .get(
         'recipes/?recipeId=' + recipeId,
@@ -43,11 +53,31 @@ function RecipeDetails(props) {
         setPrice(response.data.recipe.price);
         setIngredients(response.data.ingredients);
         setRecipeItems(response.data.recipe.recipeItem);
+        setRecipeOwnerId(response.data.recipe.user);
     })
     .catch((e) => {
         console.log("e: ", e.message)
     });
     }, [])
+ 
+    const deleteRecipe = (recipeId) =>{
+        console.log("recipeId: ", recipeId);
+        Api()
+        .delete(
+            'recipe/?recipeId=' + recipeId,
+            {
+                headers: {
+                    authorization: "Bearer " + token
+                },
+            }
+        ).then((response) => {
+            console.log()
+            console.log("response.data: ", response.data);
+        })
+        .catch((e) => {
+            console.log("e: ", e.message)
+        });
+    }
 
     const logInfo = () => {
         console.log("name: ", name)
@@ -63,6 +93,21 @@ function RecipeDetails(props) {
         })
     }
 
+    const createTwoButtonAlert = () =>
+    Alert.alert('Delete Recipe', 'Are you sure to delete this recipe', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'OK', onPress: () => {
+        deleteRecipe(recipeId);
+        navigate("RecipeList")
+      } },
+    ]);
+
+    
+
   return (
     <ImageBackground
         source={require('../../assets/images/boards.png')}
@@ -75,7 +120,14 @@ function RecipeDetails(props) {
                 contentContainerStyle={styles.scrollViewContainer}
             >
                     <SmallSpacer />
+                <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
                 <Text style={styles.header}>{name}</Text>
+                {currentUserId === recipeOwnerId &&
+                <TouchableOpacity onPress={createTwoButtonAlert}>
+                <Icon name='trash-outline' type='ionicon' color='red' />
+                </TouchableOpacity>
+                }
+                </View>
                 <SmallSpacer />
                 {/* <Card.Divider/> */}
                 <View style={{alignItems: "center"}}>
