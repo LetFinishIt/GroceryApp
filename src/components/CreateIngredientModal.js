@@ -92,6 +92,8 @@ const CreateIngredientModal = ({isVisible, onCancel, reloadOptions}) => {
                 setUnitType("");
                 setCalorie("");
                 reloadOptions();
+            })
+            .then((response) => {
                 onCancel();
             })
             .catch((err) => {
