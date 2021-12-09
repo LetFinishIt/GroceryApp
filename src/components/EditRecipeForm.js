@@ -176,8 +176,8 @@ const EditRecipeForm = props => {
         onChangeText={input=> setRecipeName(input)}
         autoCapitalize="none"
         autoCorrect={false}
-        // labelStyle={styles.label}
-        // inputStyle={styles.input}
+        labelStyle={styles.label}
+        inputStyle={styles.input}
       />
         <Input
         label="Description"
@@ -185,8 +185,8 @@ const EditRecipeForm = props => {
         onChangeText={input=> setDescription(input)}
         autoCapitalize="none"
         autoCorrect={false}
-        // labelStyle={styles.label}
-        // inputStyle={styles.input}
+        labelStyle={styles.label}
+        inputStyle={styles.input}
       />
       <Input
         label="Photo"
@@ -194,8 +194,8 @@ const EditRecipeForm = props => {
         onChangeText={input=> setPhoto(input)}
         autoCapitalize="none"
         autoCorrect={false}
-        // labelStyle={styles.label}
-        // inputStyle={styles.input}
+        labelStyle={styles.label}
+        inputStyle={styles.input}
       />
       <Input
         label="Price"
@@ -203,8 +203,8 @@ const EditRecipeForm = props => {
         onChangeText={input => setPrice(input)}
         autoCapitalize="none"
         autoCorrect={false}
-        // labelStyle={styles.label}
-        // inputStyle={styles.input}
+        labelStyle={styles.label}
+        inputStyle={styles.input}
       />
       <View style={{width: "90%", marginLeft: "auto", marginRight: "auto", display: "flex", flexDirection: "row", alignItems: "center"}}>
         <View style={{width: "90%"}}>
@@ -292,7 +292,7 @@ const EditRecipeForm = props => {
         console.log('sucessful update recipe');
       }} 
       title={"Submit"}
-      style={styles.submitButton}
+      containerStyle={styles.submitButton}
       />
     </View>
   );
@@ -302,7 +302,8 @@ const styles = StyleSheet.create({
   ModalView:{
     alignItems: 'center',
     justifyContent: 'flex-end',
-    marginTop: 40,
+    marginTop: 20,
+    height: '90%',
   },
   errorMessage: {
     fontSize: 16,
@@ -370,8 +371,8 @@ const styles = StyleSheet.create({
   minWidth: 40,
   borderRadius: 40,
   marginBottom: 10,
-  marginRight: 10,
-  marginLeft: 10,
+  marginTop: 10,
+  // marginLeft: 10,
   backgroundColor: "rgba(0,0,0,0.65)",
  },
  newIngredientButton :{

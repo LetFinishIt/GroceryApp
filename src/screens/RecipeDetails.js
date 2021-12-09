@@ -111,199 +111,199 @@ function RecipeDetails(props) {
     //On Change Text method for Modal
 
 
-  const onChange = ({inputName, value: inputValue}) => {
-    // setForm({...form, [inputName]: inputValue});
+//   const onChange = ({inputName, value: inputValue}) => {
+//     // setForm({...form, [inputName]: inputValue});
 
-    if (inputName === 'recipeName') {
+//     if (inputName === 'recipeName') {
       
-    }
-    if (inputName === 'petType') {
-      if (inputValue === null) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Pet Type cant be empty',
-          };
-        });
-      } else {
-        // empty errors if user is filling again
-        setFormErrors(prev => {
-          return {...prev, [inputName]: null};
-        });
-      }
-    }
-    if (inputName === 'username') {
-      if (inputValue.length === 0) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Username cant be empty',
-          };
-        });
-      } else if (inputValue.length > 20) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Username cant be longer than 20 words',
-          };
-        });
-      } else {
-        // empty errors if user is filling again
-        setFormErrors(prev => {
-          return {...prev, [inputName]: null};
-        });
-      }
-    }
-    if (inputName === 'petName') {
-      if (inputValue.length === 0) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Pet name cant be empty',
-          };
-        });
-      } else if (inputValue.length > 20) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Pet name cant be longer than 20 words',
-          };
-        });
-      } else {
-        // empty errors if user is filling again
-        setFormErrors(prev => {
-          return {...prev, [inputName]: null};
-        });
-      }
-    }
-    if (inputName === 'breed') {
-      if (inputValue.length === 0) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Breed cant be empty',
-          };
-        });
-      } else if (inputValue.length > 25) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Breed cant be longer than 25 words',
-          };
-        });
-      } else {
-        // empty errors if user is filling again
-        setFormErrors(prev => {
-          return {...prev, [inputName]: null};
-        });
-      }
-    }
-    if (inputName === 'biography') {
-      if (inputValue.length > 500) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Biography cant be longer than 500 words',
-          };
-        });
-      } else {
-        // empty errors if user is filling again
-        setFormErrors(prev => {
-          return {...prev, [inputName]: null};
-        });
-      }
-    }
-    if (inputName === 'likes') {
-      if (inputValue.length > 500) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Pet likes cant be longer than 500 words',
-          };
-        });
-      } else {
-        // empty errors if user is filling again
-        setFormErrors(prev => {
-          return {...prev, [inputName]: null};
-        });
-      }
-    }
-    if (inputName === 'dislikes') {
-      if (inputValue.length > 500) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Pet dislikes cant be longer than 500 words',
-          };
-        });
-      } else {
-        // empty errors if user is filling again
-        setFormErrors(prev => {
-          return {...prev, [inputName]: null};
-        });
-      }
-    }
-    if (inputName === 'birthday') {
-      if (inputValue === null) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Birthday cant be empty',
-          };
-        });
-      } else {
-        // empty errors if user is filling again
-        setFormErrors(prev => {
-          return {...prev, [inputName]: null};
-        });
-      }
-    }
-    if (inputName === 'health') {
-      if (inputValue.length > 500) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Health details cant be longer than 500 characters',
-          };
-        });
-      } else {
-        // empty errors if user is filling again
-        setFormErrors(prev => {
-          return {...prev, [inputName]: null};
-        });
-      }
-    }
-    if (inputName === 'vet') {
-      if (inputValue.length > 100) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Vet name cant be longer than 100 characters',
-          };
-        });
-      } else {
-        // empty errors if user is filling again
-        setFormErrors(prev => {
-          return {...prev, [inputName]: null};
-        });
-      }
-    }
-    if (inputName === 'specialSkills') {
-      if (inputValue.length > 500) {
-        setFormErrors(prev => {
-          return {
-            ...prev,
-            [inputName]: 'Special Skills cant be longer than 500 characters',
-          };
-        });
-      } else {
-        // empty errors if user is filling again
-        setFormErrors(prev => {
-          return {...prev, [inputName]: null};
-        });
-      }
-    }
-    };
+//     }
+//     if (inputName === 'petType') {
+//       if (inputValue === null) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Pet Type cant be empty',
+//           };
+//         });
+//       } else {
+//         // empty errors if user is filling again
+//         setFormErrors(prev => {
+//           return {...prev, [inputName]: null};
+//         });
+//       }
+//     }
+//     if (inputName === 'username') {
+//       if (inputValue.length === 0) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Username cant be empty',
+//           };
+//         });
+//       } else if (inputValue.length > 20) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Username cant be longer than 20 words',
+//           };
+//         });
+//       } else {
+//         // empty errors if user is filling again
+//         setFormErrors(prev => {
+//           return {...prev, [inputName]: null};
+//         });
+//       }
+//     }
+//     if (inputName === 'petName') {
+//       if (inputValue.length === 0) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Pet name cant be empty',
+//           };
+//         });
+//       } else if (inputValue.length > 20) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Pet name cant be longer than 20 words',
+//           };
+//         });
+//       } else {
+//         // empty errors if user is filling again
+//         setFormErrors(prev => {
+//           return {...prev, [inputName]: null};
+//         });
+//       }
+//     }
+//     if (inputName === 'breed') {
+//       if (inputValue.length === 0) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Breed cant be empty',
+//           };
+//         });
+//       } else if (inputValue.length > 25) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Breed cant be longer than 25 words',
+//           };
+//         });
+//       } else {
+//         // empty errors if user is filling again
+//         setFormErrors(prev => {
+//           return {...prev, [inputName]: null};
+//         });
+//       }
+//     }
+//     if (inputName === 'biography') {
+//       if (inputValue.length > 500) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Biography cant be longer than 500 words',
+//           };
+//         });
+//       } else {
+//         // empty errors if user is filling again
+//         setFormErrors(prev => {
+//           return {...prev, [inputName]: null};
+//         });
+//       }
+//     }
+//     if (inputName === 'likes') {
+//       if (inputValue.length > 500) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Pet likes cant be longer than 500 words',
+//           };
+//         });
+//       } else {
+//         // empty errors if user is filling again
+//         setFormErrors(prev => {
+//           return {...prev, [inputName]: null};
+//         });
+//       }
+//     }
+//     if (inputName === 'dislikes') {
+//       if (inputValue.length > 500) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Pet dislikes cant be longer than 500 words',
+//           };
+//         });
+//       } else {
+//         // empty errors if user is filling again
+//         setFormErrors(prev => {
+//           return {...prev, [inputName]: null};
+//         });
+//       }
+//     }
+//     if (inputName === 'birthday') {
+//       if (inputValue === null) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Birthday cant be empty',
+//           };
+//         });
+//       } else {
+//         // empty errors if user is filling again
+//         setFormErrors(prev => {
+//           return {...prev, [inputName]: null};
+//         });
+//       }
+//     }
+//     if (inputName === 'health') {
+//       if (inputValue.length > 500) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Health details cant be longer than 500 characters',
+//           };
+//         });
+//       } else {
+//         // empty errors if user is filling again
+//         setFormErrors(prev => {
+//           return {...prev, [inputName]: null};
+//         });
+//       }
+//     }
+//     if (inputName === 'vet') {
+//       if (inputValue.length > 100) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Vet name cant be longer than 100 characters',
+//           };
+//         });
+//       } else {
+//         // empty errors if user is filling again
+//         setFormErrors(prev => {
+//           return {...prev, [inputName]: null};
+//         });
+//       }
+//     }
+//     if (inputName === 'specialSkills') {
+//       if (inputValue.length > 500) {
+//         setFormErrors(prev => {
+//           return {
+//             ...prev,
+//             [inputName]: 'Special Skills cant be longer than 500 characters',
+//           };
+//         });
+//       } else {
+//         // empty errors if user is filling again
+//         setFormErrors(prev => {
+//           return {...prev, [inputName]: null};
+//         });
+//       }
+//     }
+//     };
     
 
   return (
@@ -313,16 +313,16 @@ function RecipeDetails(props) {
         style={styles.container}
     >
         <Modal visible={modalVisible} style={{flex: 1}}>
-            {/* <ImageBackground 
-             source={require('../../assets/images/veggies.png')}
+            <ImageBackground 
+             source={require('../../assets/images/wood.jpeg')}
              resizeMode="cover"
-             style={styles.modalContainer}> */}
+             style={styles.modalContainer}>
             <EditRecipeForm 
             recipeName={name}
             description={description}
             photo={imageUrl}
             price={price}
-            onChange={onChange}
+            // onChange={onChange}
             recipeItem={recipeItems}
             recipeId={recipeId}
             />
@@ -333,9 +333,10 @@ function RecipeDetails(props) {
             console.log('navigation works');
             }} 
             title={"Close"}
-            style={styles.closeButton}
+            containerStyle={styles.closeButton}
             />
             </View>
+            </ImageBackground>
         </Modal>
         <View style={styles.cardContainer}>
             <ScrollView
@@ -469,9 +470,9 @@ const styles = StyleSheet.create({
         width: 200,
         minWidth: 40,
         borderRadius: 40,
-        marginBottom: 10,
-        marginRight: 10,
-        marginLeft: 10,
+        // marginBottom: 10,
+        // marginRight: 10,
+        // marginLeft: 10,
         backgroundColor: "rgba(0,0,0,0.65)",
     }
 });
