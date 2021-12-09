@@ -71,10 +71,6 @@ function SigninScreen({navigator}) {
           text="Dont have an account? Sign up"
           routeName="Signup"
         />
-        <NavLink
-          text="Skip to RecipeList"
-          routeName="RecipeList"
-        />
       </View>
       </KeyboardAwareScrollView>
       </ImageBackground>
