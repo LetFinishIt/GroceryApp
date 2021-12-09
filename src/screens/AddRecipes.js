@@ -22,6 +22,7 @@ const AddRecipes = ({ navigation }) => {
         recipeItem: ingredientList,
         isPrivate: false,
         user:  await SecureStore.getItemAsync("userId"),
+        userEmail: await SecureStore.getItemAsync("email"),
       }
       
       
