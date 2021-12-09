@@ -84,7 +84,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
                 onPress={() => incrementQuantity(ingredient)}
                 />    
                 </View>
-                <Button title={"Remove"} buttonStyle={{backgroundColor: "rgba(255,0,0,0.35)"}} containerStyle={styles.newRecipeButton}
+                <Button title={"X"} buttonStyle={{backgroundColor: "rgba(255,0,0,0.35)"}} containerStyle={styles.newRecipeButton}
                 onPress={() => removeSelectedIngredients(ingredient)}
                   />
               </View>

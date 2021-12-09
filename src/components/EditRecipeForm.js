@@ -12,7 +12,6 @@ import DeleteIngredientModal from './DeleteIngredientModal';
 const EditRecipeForm = props => {
   // set newArray= props.recipeItem
   //  newArray.find( selected => selected.id === )
-  const [arrayItem,setArrayItem] = useState(props.recipeItem);
   const [recipeName, setRecipeName] = useState(props.recipeName);
   const [description, setDescription] = useState(props.description);
   const [price, setPrice] = useState(props.price);
@@ -29,7 +28,7 @@ const EditRecipeForm = props => {
   const [searchValue, setSearchValue] = useState("");
 
 
-  const [recipeItem, setRecipeItem] = useState(arrayItem);
+  const [recipeItem, setRecipeItem] = useState(props.recipeItem);
 
 
     // Decrease Quantity for ingredients
@@ -68,7 +67,6 @@ const EditRecipeForm = props => {
   // use effect for render ingredient list
   useEffect(() => {
     loadOptions();
-    console.log('print array item', arrayItem);
     // console.log('print out ingredient option', ingredientOptions);
   }, [])
 
@@ -86,14 +84,13 @@ const EditRecipeForm = props => {
         title: item.ingredientName + " - " + item.unitType,
         itemQuantity : 0,
       }))
-      // console.log('print array Item', arrayItem);
-      const ingred = arrayItem.map((item) => ({
+      const ingred = recipeItem.map((item) => ({
         ingredients: item.ingredients,
-        title: items.find(selectedIngredient => selectedIngredient._id === item.ingredients).ingredientName,
+        title: items.find(selectedIngredient => selectedIngredient._id === item.ingredients).ingredientName + " - " + items.find(selectedIngredient => selectedIngredient._id === item.ingredients).unitType,
         itemQuantity : item.itemQuantity,
       }))
       console.log('print ingred', ingred);
-      setArrayItem([...ingred]);
+      setRecipeItem([...ingred]);
       setIngredientOptions(ingredients);
     })
   }
@@ -130,7 +127,7 @@ const EditRecipeForm = props => {
                 onPress={() => incrementQuantity(ingredient)}
                 />    
                 </View>
-                <Button title={"Remove"} buttonStyle={{backgroundColor: "rgba(255,0,0,0.35)"}} containerStyle={styles.newRecipeButton}
+                <Button title={"X"} buttonStyle={{backgroundColor: "rgba(255,0,0,0.35)"}} containerStyle={styles.newRecipeButton}
                 onPress={() => removeSelectedIngredients(ingredient)}
                   />
               </View>
@@ -305,8 +302,7 @@ const styles = StyleSheet.create({
   ModalView:{
     alignItems: 'center',
     justifyContent: 'flex-end',
-    marginTop: 40
-
+    marginTop: 40,
   },
   errorMessage: {
     fontSize: 16,
