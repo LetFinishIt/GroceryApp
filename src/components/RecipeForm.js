@@ -33,6 +33,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
   const [deleteIngId, setDeleteIngId] = useState("");
   const [deleteIngTitle, setDeleteIngTitle] = useState("");
   const [searchValue, setSearchValue] = useState("");
+  var keyValue = 0;
 
   // Decrease Quantity for ingredients
   const decrementQuantity = (clickedIngredients) => {
@@ -72,7 +73,6 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
   const IngredientCard = (ingredient) => {
     return (
         <Card containerStyle={styles.cardContainer}>
-            <View style={styles.cardSubContainer}>
             <Text style={styles.cardText}>{ingredient.title}</Text>
             <View style={{flexDirection: 'row'}}>
               <View style={{flexDirection: 'row'}}>
@@ -88,7 +88,6 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
                 onPress={() => removeSelectedIngredients(ingredient)}
                   />
               </View>
-            </View>
         </Card>
     );
 };
@@ -156,6 +155,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
         ingredientTitle={deleteIngTitle}
         reloadOptions={() => loadOptions()}
     />
+    <View style={{backgroundColor: "rgba(0,0,0,0.65)", marginLeft: 15, marginRight: 15, borderRadius: 20, paddingTop: 15, paddingLeft: 10, paddingRight: 10}}>
       <Input
         label="Recipe Name"
         value={recipeName}
@@ -186,13 +186,14 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
       <Input
         label="Price"
         value={price}
-        e={setPrice}
+        onChangeText={setPrice}
         autoCapitalize="none"
         autoCorrect={false}
         labelStyle={styles.label}
         inputStyle={styles.input}
       />
-      <View style={{width: "90%", marginLeft: "auto", marginRight: "auto", display: "flex", flexDirection: "row", alignItems: "center"}}>
+      </View>
+      <View style={{width: "90%", marginLeft: "auto", marginRight: "auto", display: "flex", flexDirection: "row", alignItems: "center"}} key={keyValue}>
         <View style={{width: "90%"}}>
         {deleteIngId === "" && !openIngredientModal &&
           <AutocompleteDropdown
@@ -332,6 +333,9 @@ const styles = StyleSheet.create({
     //paddingLeft: 20,
     textAlignVertical: "center",
     textAlign: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
+    borderColor: "rgba(255,255,255,0)",
+    borderWidth: 1,
    //width: "100%",
     //height: "100%",
     //flex: 1,

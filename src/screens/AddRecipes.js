@@ -37,7 +37,7 @@ const AddRecipes = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* <NavigationEvents onWillFocus={clearErrorMessage} /> */}
       <ImageBackground
           source={require('../../assets/images/boards.png')}
@@ -53,7 +53,7 @@ const AddRecipes = ({ navigation }) => {
             }}
         />
       </ImageBackground>
-    </SafeAreaView>
+    </View>
   );
 };
 

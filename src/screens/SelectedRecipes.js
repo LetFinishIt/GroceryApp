@@ -49,7 +49,7 @@ const SelectedRecipes = ({ selectedRecipes, setSelectedRecipes }) => {
                         <Text style={{fontWeight: "bold" , color: 'white', fontSize: 15, marginTop: 15 , marginLeft: 5, marginRight: 5}}>{selectedRecipe.quantity}</Text>
                         <Button title={"+"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.button} onPress={() => incrementRecipe(selectedRecipe)}/>    
                         </View>
-                        <Button title={"Remove"} buttonStyle={{backgroundColor: "rgba(255,0,0,0.35)"}} containerStyle={styles.newRecipeButton} onPress={() => removeRecipe(selectedRecipe)}/>
+                        <Button title={"X"} buttonStyle={{backgroundColor: "rgba(255,0,0,0.35)"}} containerStyle={styles.newRecipeButton} onPress={() => removeRecipe(selectedRecipe)}/>
                     </View>
                 </View>
             </View>

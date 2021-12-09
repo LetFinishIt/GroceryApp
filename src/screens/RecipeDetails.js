@@ -347,7 +347,7 @@ function RecipeDetails(props) {
                 <Text style={styles.header}>{name}</Text>
                 {currentUserId === recipeOwnerId &&
                 <TouchableOpacity onPress={createTwoButtonAlert}>
-                <Icon name='trash-outline' type='ionicon' color='red' />
+                <Icon name='trash-outline' type='ionicon' color='red' style={{marginTop: 8, marginLeft: 10}} />
                 </TouchableOpacity>
                 }
                 </View>
