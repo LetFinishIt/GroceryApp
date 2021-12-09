@@ -131,6 +131,13 @@ GroceryList.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: "center",
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
  cardContainer: {
     backgroundColor: "rgba(0,0,0,0.65)",
     borderRadius: 20,

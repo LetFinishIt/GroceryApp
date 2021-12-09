@@ -1,32 +1,26 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { KeyboardAvoidingView, StyleSheet, View ,  SafeAreaView,TouchableOpacity, FlatList,Dimensions, ImageBackground} from 'react-native';
-import { Text, Button, Input, Card } from 'react-native-elements';
-import Spacer from './Spacer';
-import {Picker} from '@react-native-picker/picker';
-//import Autocomplete from 'react-native-autocomplete-input';
-import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
-import { Feather } from '@expo/vector-icons';
+import React, {useState, useEffect, useContext, useRef} from 'react';
+import {View, TouchableOpacity,  ImageBackground,  StyleSheet, FlatList, Dimensions} from 'react-native';
+//import styles from './styles';
+//import {useNavigation} from '@react-navigation/native';
+//import Input from '../../../../common/Input';
 import Api from '../api/apiInstance';
-import { ScrollView } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Text, Button, Input, Card } from 'react-native-elements';
+import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import CreateIngredientModal from './CreateIngredientModal';
 import DeleteIngredientModal from './DeleteIngredientModal';
 
-
-const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSignUp = false }) => {
-  const [recipeName, setRecipeName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [photo, setPhoto] = useState('');
-  const [recipeItem, setRecipeItem] = useState('');
-  const [itemQuantity, setItemQuantity] = useState('');
-  // Autocomplete drop setting
-  const [loading, setLoading] = useState(false)
-  const [suggestionsList, setSuggestionsList] = useState([])
-  const [selectedItem, setSelectedItem] = useState(null)
+const EditRecipeForm = props => {
+  // set newArray= props.recipeItem
+  //  newArray.find( selected => selected.id === )
+  const [arrayItem,setArrayItem] = useState(props.recipeItem);
+  const [recipeName, setRecipeName] = useState(props.recipeName);
+  const [description, setDescription] = useState(props.description);
+  const [price, setPrice] = useState(props.price);
+  const [photo, setPhoto] = useState(props.photo);
+  const recipeId = props.recipeId;
+  // autodrop down 
   const dropdownController = useRef(null)
   const searchRef = useRef(null)
-  const [ingredientList, setIngredientList] = useState([]);
   const [ingredientOptions, setIngredientOptions] = useState([]);
   //const [isChecked, setIsChecked] = useState(false)
   const [openIngredientModal, setOpenIngredientModal] = useState(false);
@@ -34,41 +28,93 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
   const [deleteIngTitle, setDeleteIngTitle] = useState("");
   const [searchValue, setSearchValue] = useState("");
 
-  // Decrease Quantity for ingredients
-  const decrementQuantity = (clickedIngredients) => {
-    let updatedSelectedingredient = ingredientList.filter(i => i !== null);
-    //console.log('print out selected ingredients List', updatedSelectedingredient)
-    let updatedIngredients = updatedSelectedingredient.find(selectedIngredient => selectedIngredient.ingredients === clickedIngredients.ingredients);
-    //console.log('print out selected ingredients before change', updatedSelectedingredient)
-    updatedIngredients.itemQuantity --;
-    console.log('print out selected ingredients after change', updatedSelectedingredient)
-    //setSelectedRecipes([...updatedSelectedingredient]);
-    setIngredientList([...updatedSelectedingredient]);
-    //console.log('print out selected ingredients list', ingredientList);
+
+  const [recipeItem, setRecipeItem] = useState(arrayItem);
+
+
+    // Decrease Quantity for ingredients
+    const decrementQuantity = (clickedIngredients) => {
+      let updatedSelectedingredient = recipeItem.filter(i => i !== null);
+      //console.log('print out selected ingredients List', updatedSelectedingredient)
+      let updatedIngredients = updatedSelectedingredient.find(selectedIngredient => selectedIngredient.ingredients === clickedIngredients.ingredients);
+      //console.log('print out selected ingredients before change', updatedSelectedingredient)
+      updatedIngredients.itemQuantity --;
+      console.log('print out selected ingredients after change', updatedSelectedingredient)
+      //setSelectedRecipes([...updatedSelectedingredient]);
+      setRecipeItem([...updatedSelectedingredient]);
+      //console.log('print out selected ingredients list', ingredientList);
+    }
+  
+    // Increase Quantity for ingredients
+    const incrementQuantity = (clickedIngredients) => {
+      //console.log('print out selected ingredients before change', clickedIngredients)
+      let updatedSelectedingredient = recipeItem.filter(i => i !== null);
+      //console.log('print out selected ingredients List', updatedSelectedingredient)
+      let updatedIngredients = updatedSelectedingredient.find(selectedIngredient => selectedIngredient.ingredients === clickedIngredients.ingredients);
+      //console.log('print out selected ingredients before change', updatedSelectedingredient)
+      updatedIngredients.itemQuantity ++;
+      console.log('print out selected ingredients after change', updatedSelectedingredient)
+      //setSelectedRecipes([...updatedSelectedingredient]);
+      setRecipeItem([...updatedSelectedingredient]);
+    }
+  
+    // Remove ingredients
+    const removeSelectedIngredients = (clickedIngredients) => {
+      let updatedSelectedingredient = recipeItem.filter(i => i !== null);
+      let otherSelectedIngredients = updatedSelectedingredient.filter(selectedIngredient => selectedIngredient.ingredients !== clickedIngredients.ingredients);
+      //setSelectedRecipes([...otherSelectedRecipes]);
+      setRecipeItem([...otherSelectedIngredients ]);
+    }
+  // use effect for render ingredient list
+  useEffect(() => {
+    loadOptions();
+    console.log('print array item', arrayItem);
+    // console.log('print out ingredient option', ingredientOptions);
+  }, [])
+
+
+  // loading ingredients
+  const loadOptions = () => {
+    Api()
+    .get("ingredients")
+    .then((response) => {
+      // console.log(response.data.ingredients);
+      console.log(typeof response.data.ingredients);
+      const items = response.data.ingredients;
+      const ingredients = items.map((item) => ({
+        ingredients: item._id,
+        title: item.ingredientName + " - " + item.unitType,
+        itemQuantity : 0,
+      }))
+      // console.log('print array Item', arrayItem);
+      const ingred = arrayItem.map((item) => ({
+        ingredients: item.ingredients,
+        title: items.find(selectedIngredient => selectedIngredient._id === item.ingredients).ingredientName,
+        itemQuantity : item.itemQuantity,
+      }))
+      console.log('print ingred', ingred);
+      setArrayItem([...ingred]);
+      setIngredientOptions(ingredients);
+    })
   }
 
-  // Increase Quantity for ingredients
-  const incrementQuantity = (clickedIngredients) => {
-    //console.log('print out selected ingredients before change', clickedIngredients)
-    let updatedSelectedingredient = ingredientList.filter(i => i !== null);
-    //console.log('print out selected ingredients List', updatedSelectedingredient)
-    let updatedIngredients = updatedSelectedingredient.find(selectedIngredient => selectedIngredient.ingredients === clickedIngredients.ingredients);
-    //console.log('print out selected ingredients before change', updatedSelectedingredient)
-    updatedIngredients.itemQuantity ++;
-    console.log('print out selected ingredients after change', updatedSelectedingredient)
-    //setSelectedRecipes([...updatedSelectedingredient]);
-    setIngredientList([...updatedSelectedingredient]);
-    //console.log('print out selected ingredients list', ingredientList);
+  const onClickDelete = (itemTitle, itemId) => {
+    setDeleteIngTitle(itemTitle)
+    setDeleteIngId(itemId)
+  }
+  // handle selected within dropdown
+  const handleSelectIngredient = (item) => {
+      console.log('running again');
+      console.log('print out item', item);
+      setRecipeItem([...recipeItem,item]);
+      // if(ingredientList.filter(i => i !== null).some(existingItem => existingItem._id === item.id)) {
+      //   console.log('print ingredient list', ingredientList);
+      //   setRecipeItem([...recipeItem,item]);
+      //   }
+    setSearchValue("");
   }
 
-  // Remove ingredients
-  const removeSelectedIngredients = (clickedIngredients) => {
-    let updatedSelectedingredient = ingredientList.filter(i => i !== null);
-    let otherSelectedIngredients = updatedSelectedingredient.filter(selectedIngredient => selectedIngredient.ingredients !== clickedIngredients.ingredients);
-    //setSelectedRecipes([...otherSelectedRecipes]);
-    setIngredientList([...otherSelectedIngredients ]);
-  }
-
+  // Create card for loading item
   const IngredientCard = (ingredient) => {
     return (
         <Card containerStyle={styles.cardContainer}>
@@ -91,106 +137,77 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
             </View>
         </Card>
     );
-};
+  };
 
-  useEffect(() => {
-    loadOptions();
-  }, [])
-  
-  const loadOptions = () => {
+  const body = {
+    recipeName: recipeName,
+    description: description,
+    price: price,
+    recipePhoto : photo, 
+    isPrivate: false,
+    recipeItem: recipeItem
+  }
+
+  // update the recipes
+  const updateRecipe = () => {
     Api()
-    .get("ingredients")
+    .put("editRecipe/?recipeId="+ recipeId, body )
     .then((response) => {
-      console.log(response.data.ingredients);
-      console.log(typeof response.data.ingredients);
-      const items = response.data.ingredients;
-      const ingredients = items.map((item) => ({
-        ingredients: item._id,
-        title: item.ingredientName + " - " + item.unitType,
-        itemQuantity : 0,
-      }))
-      setIngredientOptions(ingredients);
+      console.log(response);
     })
   }
 
-  const handleSelectIngredient = (item) => {
-    if (ingredientList.length <= 1) {
-      if(!ingredientList.filter(i => i !== null).some(existingItem => existingItem._id === item.id)) {
-      console.log('print ingredient list', ingredientList);
-      setIngredientList([...ingredientList,item]);
-      }
-    }
-    else{
-      console.log('running again');
-      if(ingredientList.filter(i => i !== null).some(existingItem => existingItem._id === item.id)) {
-        console.log('print ingredient list', ingredientList);
-        setIngredientList([...ingredientList,item]);
-        }
-      // I comment out since i do not see the effect of below code toward your function but feel free to uncomment it 
-      //const remainingIngredientOptions = ingredientOptions.filter(option => option._id !== item._id);
-      //setIngredientOptions([...remainingIngredientOptions]);
-      //console.log('print remaining Ingredient Options',remainingIngredientOptions);
-    }
-    setSearchValue("");
-  }
+  // add the keyboard award .. 
 
-  const onClickDelete = (itemTitle, itemId) => {
-    setDeleteIngTitle(itemTitle)
-    setDeleteIngId(itemId)
-  }
-
-  return (
-    // <KeyboardAwareScrollView 
-    // style={styles.form}
-    // >
-    <>
-    <CreateIngredientModal
+  return(
+    <View style={styles.ModalView}>  
+      <CreateIngredientModal
         onCancel={() => { setOpenIngredientModal(false) }}
         isVisible={openIngredientModal}
         reloadOptions={() => loadOptions()}
-    />
-    <DeleteIngredientModal
+      />
+      <DeleteIngredientModal
         onCancel={() => { (setDeleteIngId(""), setDeleteIngTitle("")) }}
         isVisible={deleteIngId}
         ingredientId={deleteIngId}
         ingredientTitle={deleteIngTitle}
         reloadOptions={() => loadOptions()}
-    />
+      />
       <Input
         label="Recipe Name"
         value={recipeName}
-        onChangeText={setRecipeName}
+        onChangeText={input=> setRecipeName(input)}
         autoCapitalize="none"
         autoCorrect={false}
-        labelStyle={styles.label}
-        inputStyle={styles.input}
+        // labelStyle={styles.label}
+        // inputStyle={styles.input}
       />
-      <Input
+        <Input
         label="Description"
         value={description}
-        onChangeText={setDescription}
+        onChangeText={input=> setDescription(input)}
         autoCapitalize="none"
         autoCorrect={false}
-        labelStyle={styles.label}
-        inputStyle={styles.input}
+        // labelStyle={styles.label}
+        // inputStyle={styles.input}
       />
       <Input
         label="Photo"
         value={photo}
-        onChangeText={setPhoto}
+        onChangeText={input=> setPhoto(input)}
         autoCapitalize="none"
         autoCorrect={false}
-        labelStyle={styles.label}
-        inputStyle={styles.input}
+        // labelStyle={styles.label}
+        // inputStyle={styles.input}
       />
       <Input
         label="Price"
         value={price}
-        e={setPrice}
+        onChangeText={input => setPrice(input)}
         autoCapitalize="none"
         autoCorrect={false}
-        labelStyle={styles.label}
-        inputStyle={styles.input}
+        // labelStyle={styles.label}
+        // inputStyle={styles.input}
       />
       <View style={{width: "90%", marginLeft: "auto", marginRight: "auto", display: "flex", flexDirection: "row", alignItems: "center"}}>
         <View style={{width: "90%"}}>
@@ -235,9 +252,9 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
               alignSelfs: "center",
               backgroundColor: "#383b42"
             }}
-            // inputContainerStyle={{
-            //   backgroundColor: "transparent"
-            // }}
+            inputContainerStyle={{
+              backgroundColor: "transparent"
+            }}
             suggestionsListContainerStyle={{
               backgroundColor: "#383b42",
             }}
@@ -255,12 +272,6 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
               }
                 </View>
             )}
-            // ChevronIconComponent={
-            //   <Feather name="x-circle" size={18} color="#fff" />
-            // }
-            // ClearIconComponent={
-            //   <Feather name="chevron-down" size={20} color="#fff" />
-            // }
             inputHeight={50}
             // showChevron={false}
             showClear={false}
@@ -270,32 +281,33 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
             <Button title={"+"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.newIngredientButton} 
               onPress={() => setOpenIngredientModal(true)}
               />
-        </View>
-      {ingredientList && ingredientList.length > 0
-        &&
-        <FlatList
-        style={styles.flatList}
-        nestedScrollEnabled={true}
-        data={ingredientList.filter(i => i !== null)}
-        keyExtractor={(item) => item.ingredients}
-        renderItem={({ item }) => IngredientCard(item)}
-        />}
-        {errorMessage ? (
-          <Text style={styles.errorMessage}>{errorMessage}</Text>
-          ) : null}
-        <Spacer>
-          <Button
-            title={submitButtonText}
-            onPress={() => onSubmit(recipeName, price, description, photo,  ingredientList.filter(i => i !== null ))}
-            style={styles.createButton}
-            />
-        </Spacer>
-        </>
-        // </KeyboardAwareScrollView>
+      </View>
+      <FlatList
+      style={styles.flatList}
+        // nestedScrollEnabled={true}
+      data={recipeItem.filter(i => i !== null )}
+      keyExtractor={(item) => item.ingredients}
+      renderItem={({ item }) => IngredientCard(item)}
+      />
+      <Button 
+      onPress={() => {
+        updateRecipe();
+        console.log('sucessful update recipe');
+      }} 
+      title={"Submit"}
+      style={styles.submitButton}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  ModalView:{
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 40
+
+  },
   errorMessage: {
     fontSize: 16,
     color: 'red',
@@ -316,7 +328,7 @@ const styles = StyleSheet.create({
   },
   flatList: {
     color: "white",
-    height: 200,
+    height: 300,
   },
   input: {
     color: "white",
@@ -349,6 +361,16 @@ const styles = StyleSheet.create({
  },
  button :{
   height: 40,
+  minWidth: 40,
+  borderRadius: 40,
+  marginBottom: 10,
+  marginRight: 10,
+  marginLeft: 10,
+  backgroundColor: "rgba(0,0,0,0.65)",
+ },
+ submitButton :{
+  height: 40,
+  width: 200,
   minWidth: 40,
   borderRadius: 40,
   marginBottom: 10,
@@ -404,5 +426,4 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
 });
-
-export default RecipeForm;
+export default EditRecipeForm;
