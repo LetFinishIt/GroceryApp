@@ -74,8 +74,8 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
     // .get(`userRecipes/?email=${email}`)
     .get(`userRecipes/?email=lushi@gmail.com`)
     .then((response) => {
-      console.log("response.data: ", response.data.recipes)
-      setRecipeList(response.data.recipes);
+      console.log("response.data.recipes: ", response.data.recipes)
+      setRecipeList([...response.data.recipes[0]]);
     })
     .catch((e) => {
       console.log("e.response: ", e.response);
