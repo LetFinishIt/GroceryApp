@@ -9,6 +9,7 @@ import {navigate} from "../navigationRef";
 import { FontAwesome } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { FontAwesome5 } from '@expo/vector-icons'; 
+import * as SecureStore from 'expo-secure-store';
 
 const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
   //const { state, fetchTracks } = useContext(TrackContext);
@@ -68,9 +69,12 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
   };
 
   const displayRecipe = async () => {
+    // const email = await SecureStore.getItemAsync("email")
     Api()
-    .get("allRecipes")
+    // .get(`userRecipes/?email=${email}`)
+    .get(`userRecipes/?email=lushi@gmail.com`)
     .then((response) => {
+      console.log("response.data: ", response.data.recipes)
       setRecipeList(response.data.recipes);
     })
     .catch((e) => {

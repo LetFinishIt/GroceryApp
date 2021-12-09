@@ -115,14 +115,14 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
 
   const handleSelectIngredient = (item) => {
     if (ingredientList.length <= 1) {
-      if(!ingredientList.filter(i => i !== null).some(existingItem => existingItem._id === item.id)) {
+      if(!ingredientList.filter(i => i !== null).some(existingItem => existingItem?._id === item?.id)) {
       console.log('print ingredient list', ingredientList);
       setIngredientList([...ingredientList,item]);
       }
     }
     else{
       console.log('running again');
-      if(ingredientList.filter(i => i !== null).some(existingItem => existingItem._id === item.id)) {
+      if(ingredientList.filter(i => i !== null).some(existingItem => existingItem?._id === item?.id)) {
         console.log('print ingredient list', ingredientList);
         setIngredientList([...ingredientList,item]);
         }

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, Image, ImageBackground } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
+import { NavigationEvents, SafeAreaView } from 'react-navigation';
 import { Context as AuthContext } from '../context/AuthContext';
 import RecipeForm from '../components/RecipeForm';
 import NavLink from '../components/NavLink';
@@ -36,12 +36,12 @@ const AddRecipes = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* <NavigationEvents onWillFocus={clearErrorMessage} /> */}
       <ImageBackground
           source={require('../../assets/images/boards.png')}
           resizeMode="cover"
-          style={styles.container}
+          style={styles.imageContainer}
       >
         <RecipeForm
           //headerText="Sign Up for GroList"
@@ -52,7 +52,7 @@ const AddRecipes = ({ navigation }) => {
             }}
         />
       </ImageBackground>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -66,6 +66,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+  imageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingTop: 40,
   },
   logoImage: {
     height: 200,

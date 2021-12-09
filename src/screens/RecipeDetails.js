@@ -357,7 +357,10 @@ function RecipeDetails(props) {
                     <Image
                         style={styles.recipeImage}
                         resizeMode="contain"
-                        source={{uri: imageUrl}}
+                        source={imageUrl
+                            ? {uri: imageUrl}
+                            : {uri : "https://www.thefrenchcookingacademy.com/wp-content/themes/neptune-by-osetin/assets/img/placeholder.jpg"}
+                        }
                     />
                     <SmallSpacer />
                     <View style={styles.ingredientContainer}>
