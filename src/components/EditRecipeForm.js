@@ -8,6 +8,9 @@ import { Text, Button, Input, Card } from 'react-native-elements';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import CreateIngredientModal from './CreateIngredientModal';
 import DeleteIngredientModal from './DeleteIngredientModal';
+import { NavigationContext } from 'react-navigation';
+import {navigate} from "../navigationRef";
+
 
 const EditRecipeForm = props => {
   // set newArray= props.recipeItem
@@ -290,6 +293,7 @@ const EditRecipeForm = props => {
       onPress={() => {
         updateRecipe();
         console.log('sucessful update recipe');
+        props.onClose();
       }} 
       title={"Submit"}
       containerStyle={styles.submitButton}

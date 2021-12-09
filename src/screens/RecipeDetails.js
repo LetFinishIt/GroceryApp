@@ -24,18 +24,19 @@ function RecipeDetails(props) {
     const [ingredients, setIngredients] = useState([]);
     const [imageUrl, setImageUrl] = useState(null);
     const [recipeItems, setRecipeItems] = useState([]);
+    const [recipeOwnerEmail, setRecipeOwnerEmail] = useState([]);
     const [recipeOwnerId, setRecipeOwnerId] = useState([]);
-    const [currentUserId,setCurrentUserId]= useState(); 
+    const [currentUserEmail,setCurrentUserEmail]= useState(); 
     const [modalVisible, setModalVisible] = useState(false);
 
-    const getCurrentUserId =  async() => {
-        setCurrentUserId( await SecureStore.getItemAsync("userId"));
+    const getCurrentUserEmail =  async() => {
+        setCurrentUserEmail(await SecureStore.getItemAsync("email"));
     } 
 
     useEffect(() => {
     console.log("recipeId: ", recipeId);
     //get current user id
-    getCurrentUserId();
+    getCurrentUserEmail();
     Api()
     .get(
         'recipes/?recipeId=' + recipeId,
@@ -56,6 +57,7 @@ function RecipeDetails(props) {
         setIngredients(response.data.ingredients);
         setRecipeItems(response.data.recipe.recipeItem);
         setRecipeOwnerId(response.data.recipe.user);
+        setRecipeOwnerEmail(response.data.recipe.userEmail);
     })
     .catch((e) => {
         console.log("e: ", e.message)
@@ -108,204 +110,6 @@ function RecipeDetails(props) {
       } },
     ]);
 
-    //On Change Text method for Modal
-
-
-//   const onChange = ({inputName, value: inputValue}) => {
-//     // setForm({...form, [inputName]: inputValue});
-
-//     if (inputName === 'recipeName') {
-      
-//     }
-//     if (inputName === 'petType') {
-//       if (inputValue === null) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Pet Type cant be empty',
-//           };
-//         });
-//       } else {
-//         // empty errors if user is filling again
-//         setFormErrors(prev => {
-//           return {...prev, [inputName]: null};
-//         });
-//       }
-//     }
-//     if (inputName === 'username') {
-//       if (inputValue.length === 0) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Username cant be empty',
-//           };
-//         });
-//       } else if (inputValue.length > 20) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Username cant be longer than 20 words',
-//           };
-//         });
-//       } else {
-//         // empty errors if user is filling again
-//         setFormErrors(prev => {
-//           return {...prev, [inputName]: null};
-//         });
-//       }
-//     }
-//     if (inputName === 'petName') {
-//       if (inputValue.length === 0) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Pet name cant be empty',
-//           };
-//         });
-//       } else if (inputValue.length > 20) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Pet name cant be longer than 20 words',
-//           };
-//         });
-//       } else {
-//         // empty errors if user is filling again
-//         setFormErrors(prev => {
-//           return {...prev, [inputName]: null};
-//         });
-//       }
-//     }
-//     if (inputName === 'breed') {
-//       if (inputValue.length === 0) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Breed cant be empty',
-//           };
-//         });
-//       } else if (inputValue.length > 25) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Breed cant be longer than 25 words',
-//           };
-//         });
-//       } else {
-//         // empty errors if user is filling again
-//         setFormErrors(prev => {
-//           return {...prev, [inputName]: null};
-//         });
-//       }
-//     }
-//     if (inputName === 'biography') {
-//       if (inputValue.length > 500) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Biography cant be longer than 500 words',
-//           };
-//         });
-//       } else {
-//         // empty errors if user is filling again
-//         setFormErrors(prev => {
-//           return {...prev, [inputName]: null};
-//         });
-//       }
-//     }
-//     if (inputName === 'likes') {
-//       if (inputValue.length > 500) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Pet likes cant be longer than 500 words',
-//           };
-//         });
-//       } else {
-//         // empty errors if user is filling again
-//         setFormErrors(prev => {
-//           return {...prev, [inputName]: null};
-//         });
-//       }
-//     }
-//     if (inputName === 'dislikes') {
-//       if (inputValue.length > 500) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Pet dislikes cant be longer than 500 words',
-//           };
-//         });
-//       } else {
-//         // empty errors if user is filling again
-//         setFormErrors(prev => {
-//           return {...prev, [inputName]: null};
-//         });
-//       }
-//     }
-//     if (inputName === 'birthday') {
-//       if (inputValue === null) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Birthday cant be empty',
-//           };
-//         });
-//       } else {
-//         // empty errors if user is filling again
-//         setFormErrors(prev => {
-//           return {...prev, [inputName]: null};
-//         });
-//       }
-//     }
-//     if (inputName === 'health') {
-//       if (inputValue.length > 500) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Health details cant be longer than 500 characters',
-//           };
-//         });
-//       } else {
-//         // empty errors if user is filling again
-//         setFormErrors(prev => {
-//           return {...prev, [inputName]: null};
-//         });
-//       }
-//     }
-//     if (inputName === 'vet') {
-//       if (inputValue.length > 100) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Vet name cant be longer than 100 characters',
-//           };
-//         });
-//       } else {
-//         // empty errors if user is filling again
-//         setFormErrors(prev => {
-//           return {...prev, [inputName]: null};
-//         });
-//       }
-//     }
-//     if (inputName === 'specialSkills') {
-//       if (inputValue.length > 500) {
-//         setFormErrors(prev => {
-//           return {
-//             ...prev,
-//             [inputName]: 'Special Skills cant be longer than 500 characters',
-//           };
-//         });
-//       } else {
-//         // empty errors if user is filling again
-//         setFormErrors(prev => {
-//           return {...prev, [inputName]: null};
-//         });
-//       }
-//     }
-//     };
-    
-
   return (
     <ImageBackground
         source={require('../../assets/images/boards.png')}
@@ -322,7 +126,7 @@ function RecipeDetails(props) {
             description={description}
             photo={imageUrl}
             price={price}
-            // onChange={onChange}
+            onClose={() => { setModalVisible(false) }}
             recipeItem={recipeItems}
             recipeId={recipeId}
             />
@@ -346,7 +150,7 @@ function RecipeDetails(props) {
                 <SmallSpacer />
                 <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
                 <Text style={styles.header}>{name}</Text>
-                {currentUserId === recipeOwnerId &&
+                {currentUserEmail === recipeOwnerEmail &&
                 <TouchableOpacity onPress={createTwoButtonAlert}>
                 <Icon name='trash-outline' type='ionicon' color='red' style={{marginTop: 8, marginLeft: 10}} />
                 </TouchableOpacity>
