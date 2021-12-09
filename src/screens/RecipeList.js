@@ -14,13 +14,13 @@ import * as SecureStore from 'expo-secure-store';
 const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
   //const { state, fetchTracks } = useContext(TrackContext);
   const [recipeList, setRecipeList] = useState([]);
-  const [checked, setChecked] = useState(false);
+  const [viewGlobalRecipes, setViewGlobalRecipes] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const toggleSwitchReact = () => setIsEnabled(previousState => !previousState);
   const toggleSwitchElement = () => {
-    setChecked(!checked);
+    setViewGlobalRecipes(!viewGlobalRecipes);
   };
   
   const selectRecipe = (recipe) => {
@@ -68,11 +68,31 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
     );
   };
 
-  const displayRecipe = async () => {
-    // const email = await SecureStore.getItemAsync("email")
+  const displayRecipes = async () => {
+    if (viewGlobalRecipes) {
+      displayGlobalRecipes();
+    }
+    else {
+      displayPersonalRecipes();
+    }
+  }
+
+  const displayGlobalRecipes = async () => {
     Api()
-    // .get(`userRecipes/?email=${email}`)
-    .get(`userRecipes/?email=lushi@gmail.com`)
+    .get("allRecipes")
+    .then((response) => {
+      setRecipeList(response.data.recipes);
+    })
+    .catch((e) => {
+      console.log("e.response: ", e.response);
+      console.log("e.message: ", e.message);
+    });
+  }
+
+  const displayPersonalRecipes = async () => {
+    const email = await SecureStore.getItemAsync("email")
+    Api()
+    .get(`userRecipes/?email=${email}`)
     .then((response) => {
       console.log("response.data.recipes: ", response.data.recipes)
       setRecipeList([...response.data.recipes[0]]);
@@ -84,14 +104,18 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
   }
 
   useEffect(() =>{
-    displayRecipe();
+    displayRecipes();
   },[]);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    displayRecipe();
+    displayRecipes();
     setRefreshing(false);
   }, []);
+
+  useEffect(() => {
+    displayRecipes();
+  }, [viewGlobalRecipes])
 
 
   return (
@@ -106,10 +130,10 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
       />
       <View style={styles.settingBar}>
         <View  style={{flexDirection: 'row'}}>
-        <Text style={{fontWeight: "bold" , color: '#ed288e', fontSize: 15, marginTop: 15 , marginLeft: 15}}>View Stock Recipes</Text>
+        <Text style={{fontWeight: "bold" , color: '#ed288e', fontSize: 15, marginTop: 15 , marginLeft: 15}}>View Global Recipes</Text>
         <Switch
-        value={checked}
-        onValueChange={(value) => setChecked(value)}
+        value={viewGlobalRecipes}
+        onValueChange={(value) => setViewGlobalRecipes(value)}
         />
         </View>
         {/* <Button title={"Cart"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => navigate("SelectedRecipes")}/> */}
