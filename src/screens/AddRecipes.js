@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, Image, ImageBackground } from 'react-native';
 import { NavigationEvents, SafeAreaView } from 'react-navigation';
-import { Context as AuthContext } from '../context/AuthContext';
+// import { Context as AuthContext } from '../context/AuthContext';
 import RecipeForm from '../components/RecipeForm';
 import NavLink from '../components/NavLink';
 import Api from '../api/apiInstance';
@@ -10,7 +10,7 @@ import {navigate} from "../navigationRef";
 
 
 const AddRecipes = ({ navigation }) => {
-  const { state, signup, clearErrorMessage } = useContext(AuthContext);
+  // const { state, signup, clearErrorMessage } = useContext(AuthContext);
 
   const AddNewRecipes =  async (recipeName, price, description, photo, ingredientList)=>{
     if (recipeName && description && ingredientList.length > 0) {

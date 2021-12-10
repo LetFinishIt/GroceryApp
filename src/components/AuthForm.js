@@ -38,6 +38,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSign
       <Input
         label="Email"
         value={email}
+        placeholder={'example@gmail.com'}
         onChangeText={setEmail}
         autoCapitalize="none"
         autoCorrect={false}
@@ -48,6 +49,7 @@ const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSign
         secureTextEntry
         label="Password"
         value={password}
+        placeholder={'******'}
         onChangeText={setPassword}
         autoCapitalize="none"
         autoCorrect={false}
