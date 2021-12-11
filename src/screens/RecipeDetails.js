@@ -29,9 +29,15 @@ function RecipeDetails(props) {
         setCurrentUserEmail(await SecureStore.getItemAsync("email"));
     } 
 
+    // load recipe on first render
     useEffect(() => {
-    //get current user's email address
-    getCurrentUserEmail();
+        //get current user's email address
+        getCurrentUserEmail();
+        loadRecipe();
+    }, [])
+
+    // load recipe by id
+    const loadRecipe = () => {
     Api()
     .get(
         'recipes/?recipeId=' + recipeId,
@@ -54,7 +60,7 @@ function RecipeDetails(props) {
     })
     .catch((e) => {
     });
-    }, [])
+    }
  
     // send backend request to delete recipe - only allowed if owner id and email match requestor's information
     const deleteRecipe = (recipeId) =>{
@@ -102,7 +108,7 @@ function RecipeDetails(props) {
             description={description}
             photo={imageUrl}
             price={price}
-            onClose={() => { setModalVisible(false) }}
+            onClose={() => ( setModalVisible(false), loadRecipe() )}
             recipeItem={recipeItems}
             recipeId={recipeId}
             />
