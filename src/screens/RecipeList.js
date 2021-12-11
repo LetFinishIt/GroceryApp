@@ -7,11 +7,13 @@ import { connect } from 'react-redux';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import * as SecureStore from 'expo-secure-store';
 
+// Landing screen with list of recipes
 const RecipeList = ({ selectedRecipes, setSelectedRecipes }) => {
   const [recipeList, setRecipeList] = useState([]);
   const [viewGlobalRecipes, setViewGlobalRecipes] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   
+  // select recipe to be included in grocery list generation. If recipe is already selected, increment count
   const selectRecipe = (recipe) => {
     let existingSelectedRecipe = selectedRecipes.find(selectedRecipe => selectedRecipe.recipe._id === recipe._id);
     if (existingSelectedRecipe) {
@@ -28,6 +30,7 @@ const RecipeList = ({ selectedRecipes, setSelectedRecipes }) => {
     }
   }
 
+  // Card for each recipe item. Shows title, price, and either picture or placeholder picture
   const RecipeCard = recipe => {
     return (
       <TouchableOpacity  
@@ -54,6 +57,7 @@ const RecipeList = ({ selectedRecipes, setSelectedRecipes }) => {
     );
   };
 
+  // if toggle is set to display global recipes, show all publicly visible recipes. Else show only recipes belonging to authenticated user
   const displayRecipes = async () => {
     if (viewGlobalRecipes) {
       displayGlobalRecipes();
@@ -63,6 +67,7 @@ const RecipeList = ({ selectedRecipes, setSelectedRecipes }) => {
     }
   }
 
+  // Display all publicly visible recipes
   const displayGlobalRecipes = async () => {
     Api()
     .get("allRecipes")
@@ -73,6 +78,7 @@ const RecipeList = ({ selectedRecipes, setSelectedRecipes }) => {
     });
   }
 
+  // Display recieps belonging to authenticated user
   const displayPersonalRecipes = async () => {
     const email = await SecureStore.getItemAsync("email")
     Api()
@@ -84,16 +90,19 @@ const RecipeList = ({ selectedRecipes, setSelectedRecipes }) => {
     });
   }
 
+  // On first render, load recipes
   useEffect(() =>{
     displayRecipes();
   },[]);
 
+  // Display refreshing icon and reload recipes
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     displayRecipes();
     setRefreshing(false);
   }, []);
 
+  // When toggle value is changed, reload recipes
   useEffect(() => {
     displayRecipes();
   }, [viewGlobalRecipes])
@@ -123,6 +132,7 @@ const RecipeList = ({ selectedRecipes, setSelectedRecipes }) => {
         </TouchableOpacity>
         <Button title={"+"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => navigate("AddRecipes")}/>
       </View>
+      {/* Render list of recipes */}
       <FlatList
         data={recipeList}
         keyExtractor={(item) => item._id}
@@ -138,6 +148,7 @@ const RecipeList = ({ selectedRecipes, setSelectedRecipes }) => {
   );
 };
 
+// Do not display screen header
 RecipeList.navigationOptions = {
   header: () => false,
 };

@@ -7,7 +7,7 @@ import { navigate } from '../navigationRef';
 import SmallSpacer from '../components/SmallSpacer';
 import EditRecipeForm from '../components/EditRecipeForm';
 
-
+// display details of recipe, e.g. title, ingredients, description, photo, etc.
 function RecipeDetails(props) {
     const { navigation } = props;
     const recipeId = navigation.getParam('recipeId');
@@ -24,12 +24,13 @@ function RecipeDetails(props) {
     const [currentUserEmail,setCurrentUserEmail]= useState(); 
     const [modalVisible, setModalVisible] = useState(false);
 
+    // set current user email for evaluating whether user can delete recipe
     const getCurrentUserEmail =  async() => {
         setCurrentUserEmail(await SecureStore.getItemAsync("email"));
     } 
 
     useEffect(() => {
-    //get current user id
+    //get current user's email address
     getCurrentUserEmail();
     Api()
     .get(
@@ -55,6 +56,7 @@ function RecipeDetails(props) {
     });
     }, [])
  
+    // send backend request to delete recipe - only allowed if owner id and email match requestor's information
     const deleteRecipe = (recipeId) =>{
         Api()
         .delete(
@@ -69,6 +71,7 @@ function RecipeDetails(props) {
         });
     }
 
+    // confirmation alert for deleting a recipe
     const createTwoButtonAlert = () =>
     Alert.alert('Delete Recipe', 'Are you sure to delete this recipe', [
       {
@@ -88,6 +91,7 @@ function RecipeDetails(props) {
         resizeMode="cover"
         style={styles.container}
     >
+        {/* Modal for edit recipe form. Shows on top of details screen so the user can resume after closing */}
         <Modal visible={modalVisible} style={{flex: 1}}>
             <ImageBackground 
              source={require('../../assets/images/wood.jpeg')}
@@ -140,6 +144,7 @@ function RecipeDetails(props) {
                     <SmallSpacer />
                     <View style={styles.ingredientContainer}>
                     {
+                        // map recipe items, matching ingredient to each recipe item to get normalized data about title and unit type
                         recipeItems?.map((recipeItem, index) => {
                             let ingredient = ingredients?.find(ingredient => ingredient._id === recipeItem.ingredients)
                             return (
@@ -181,6 +186,7 @@ function RecipeDetails(props) {
   );
 };
 
+// Do not show screen header
 RecipeDetails.navigationOptions = {
     header: () => false,
   };

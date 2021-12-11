@@ -5,7 +5,9 @@ import AuthForm from '../components/AuthForm';
 import NavLink from '../components/NavLink';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+// Sign up screen for registering new user
 const SignupScreen = () => {
+  // Use auth context to access post method and manage auth data
   const { signup } = useContext(AuthContext);
 
   return (
@@ -16,12 +18,14 @@ const SignupScreen = () => {
           style={styles.container}
       >
         <KeyboardAwareScrollView>
+        {/* Auth form contains form fields for sign in or sign up */}
         <AuthForm
           submitButtonText="Sign Up"
           onSubmit={(email,password,firstName,lastName)=>signup({email,password,firstName,lastName})}
           isSignUp
         />
         <View style={styles.linkContainer}>
+          {/* Option to sign in instead */}
           <NavLink
             routeName="Signin"
             text="Already have an account? Sign in instead!"
@@ -33,6 +37,7 @@ const SignupScreen = () => {
   );
 };
 
+// Do not display screen header
 SignupScreen.navigationOptions = () => {
   return {
     header: () => false,

@@ -5,9 +5,10 @@ import Api from '../api/apiInstance';
 import * as SecureStore from 'expo-secure-store';
 import {navigate} from "../navigationRef";
 
-
+// add recipe screen
 const AddRecipes = ({ navigation }) => {
 
+  // submit recipe to backend, then navigate to recipe list
   const AddNewRecipes =  async (recipeName, price, description, photo, ingredientList)=>{
     if (recipeName && description && ingredientList.length > 0) {
       const body = {
@@ -21,7 +22,6 @@ const AddRecipes = ({ navigation }) => {
         userEmail: await SecureStore.getItemAsync("email"),
       }
       
-      
       Api().post("recipe" , body).then((response)=>{
         navigate("RecipeList");
       }).catch((e) => {
@@ -31,11 +31,13 @@ const AddRecipes = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      {/* Background image */}
       <ImageBackground
           source={require('../../assets/images/boards.png')}
           resizeMode="cover"
           style={styles.imageContainer}
       >
+        {/* Form with new recipe fields */}
         <RecipeForm
           submitButtonText="Create"
           onSubmit={(recipeName, price, description, recipeItem, photo, ingredientList)=>
@@ -47,6 +49,7 @@ const AddRecipes = ({ navigation }) => {
   );
 };
 
+// Do not display navigation header
 AddRecipes.navigationOptions = () => {
   return {
     header: () => false,

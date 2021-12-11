@@ -62,8 +62,10 @@ const styles = StyleSheet.create({
     }
 })
 
+// confirmation modal for deleting ingredients
 const DeleteIngredientModal = ({isVisible, ingredientId, ingredientTitle, onCancel, reloadOptions}) => {
 
+    // send to backend
     const deleteIngredient = async () => {
         Api()
         .delete(`ingredients/?ingredientId=${ingredientId}`)
@@ -77,6 +79,7 @@ const DeleteIngredientModal = ({isVisible, ingredientId, ingredientTitle, onCanc
 
     return (
         <>
+        {/* Only render when modal is triggered */}
         {isVisible !== "" && 
             <View style={styles.absoluteContainer}>
                 <KeyboardAvoidingView style={styles.container}>
@@ -90,6 +93,7 @@ const DeleteIngredientModal = ({isVisible, ingredientId, ingredientTitle, onCanc
                     </Text>
                     <View
                     style={{margin: 10}}/>
+                    {/* Buttons to either cancel of confirm */}
                     <View style={styles.buttonDiv}>
                         <Button
                         onPress={() => onCancel()}

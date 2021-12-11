@@ -8,7 +8,7 @@ import CreateIngredientModal from './CreateIngredientModal';
 import DeleteIngredientModal from './DeleteIngredientModal';
 
 
-const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSignUp = false }) => {
+const RecipeForm = ({ errorMessage, onSubmit, submitButtonText }) => {
   const [recipeName, setRecipeName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -68,10 +68,12 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
     );
 };
 
+  // make api call for first render
   useEffect(() => {
     loadOptions();
   }, [])
   
+  // loading ingredients from backend
   const loadOptions = () => {
     Api()
     .get("ingredients")
@@ -88,6 +90,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
     })
   }
 
+  // handle selected within dropdown
   const handleSelectIngredient = (item) => {
     if (ingredientList.length <= 1) {
       if(!ingredientList.filter(i => i !== null).some(existingItem => existingItem?._id === item?.id)) {
@@ -102,6 +105,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
     setSearchValue("");
   }
 
+  // set information used by delete confirmation modal, triggering the modal to render
   const onClickDelete = (itemTitle, itemId) => {
     setDeleteIngTitle(itemTitle)
     setDeleteIngId(itemId)
@@ -109,11 +113,13 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
 
   return (
     <>
+    {/* Modal for creating ingredient */}
     <CreateIngredientModal
         onCancel={() => { setOpenIngredientModal(false) }}
         isVisible={openIngredientModal}
         reloadOptions={() => loadOptions()}
     />
+    {/* Modal to confirm deleting ingredient */}
     <DeleteIngredientModal
         onCancel={() => { (setDeleteIngId(""), setDeleteIngTitle("")) }}
         isVisible={deleteIngId}
@@ -122,6 +128,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
         reloadOptions={() => loadOptions()}
     />
     <View style={{backgroundColor: "rgba(0,0,0,0.65)", marginLeft: 15, marginRight: 15, borderRadius: 20, paddingTop: 15, paddingLeft: 10, paddingRight: 10}}>
+      {/* Input fields for form */}
       <Input
         label="Recipe Name"
         value={recipeName}
@@ -162,6 +169,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
       <View style={{width: "90%", marginLeft: "auto", marginRight: "auto", display: "flex", flexDirection: "row", alignItems: "center"}} key={keyValue}>
         <View style={{width: "90%"}}>
         {deleteIngId === "" && !openIngredientModal &&
+          // autocomplete dropdown search field for selecting ingredients
           <AutocompleteDropdown
             ref={searchRef}
             controller={(controller) => {
@@ -201,10 +209,10 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
             suggestionsListContainerStyle={{
               backgroundColor: "#383b42",
             }}
-            renderItem={(item, text) => (
-              
+            // optional parameter, overrides how each item is rendered
+            renderItem={(item) => (
               <View style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-              {item.title.toLowerCase().includes(searchValue.toLowerCase()) &&
+              {item.title.toLowerCase().includes(searchValue.toLowerCase()) && // Checks if current search parameters match item title
               <>
                 <Text style={{ color: "#fff", padding: 15 }}>{item.title}</Text>
                 <Button title={"X"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.deleteIngredientButton} 
@@ -225,6 +233,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
         </View>
       {ingredientList && ingredientList.length > 0
         &&
+        // Render each selected ingredient
         <FlatList
         style={styles.flatList}
         nestedScrollEnabled={true}

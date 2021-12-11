@@ -7,8 +7,9 @@ import * as SecureStore from 'expo-secure-store';
 import {navigate} from "../navigationRef";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+// Sign in screen for authenticating user
 function SigninScreen({}) {
-  
+  // Submit form to backend
   const handleLogin = async (email, password) => {
     const body = {
       email: email,
@@ -29,6 +30,7 @@ function SigninScreen({}) {
     });
   }
 
+  // Save successful authentication response in secure storage, then navigate to landing page
   const saveAuthInfo = async (accessToken, refreshToken, user) => {
     await SecureStore.setItemAsync("accessToken", accessToken);
     await SecureStore.setItemAsync("refreshToken", refreshToken);
@@ -47,11 +49,13 @@ function SigninScreen({}) {
           style={styles.container}
       >
         <KeyboardAwareScrollView>
+        {/* Auth form contains form fields for sign in or sign up. Receives four parameters, but only two are used in sign in */}
       <AuthForm
         onSubmit={(email, password, firstName, lastName) => handleLogin(email, password)}
         submitButtonText="Sign In"
       />
       <View style={styles.linkContainer}>
+        {/* Option to sign up instead */}
         <NavLink
           text="Dont have an account? Sign up"
           routeName="Signup"
@@ -63,6 +67,7 @@ function SigninScreen({}) {
   );
 };
 
+// Do not display screen header
 SigninScreen.navigationOptions = {
   header: () => false,
 };

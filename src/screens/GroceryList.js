@@ -6,11 +6,13 @@ import {navigate} from "../navigationRef";
 import { connect } from 'react-redux';
 import CheckBox from 'expo-checkbox';
 
+// Grocery checklist showing ingredients required to make all recipes the specified number of times
 const GroceryList = ({ selectedRecipes }) => {
     const [ingredientList, setIngredientList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
 
+    // One ingredient item, showing the checkbox, ingredient name, quantity, and ingredient unit type
     const IngredientCard = (ingredient) => {
         return (
             <Card containerStyle={styles.cardContainer}>
@@ -29,6 +31,7 @@ const GroceryList = ({ selectedRecipes }) => {
         );
     };
 
+    // check or uncheck ingredient
     const checkIngredient = (_id) => {
         let updatedIngredientList = ingredientList;
         let updatedIngredient = updatedIngredientList.find(ingredient => ingredient._id === _id);
@@ -36,6 +39,7 @@ const GroceryList = ({ selectedRecipes }) => {
         setIngredientList([...updatedIngredientList]);
     }
 
+  // call api on first render
   useEffect(() => {
       loadAllIngredients();
   }, []);
@@ -51,6 +55,7 @@ const GroceryList = ({ selectedRecipes }) => {
     });
   }
 
+  // iterate through selected recipes stored in global state, matching ingredient IDs to the names and unit types from the backend, then setting the selected quantity
   const loadIngredientList = (allIngredients) => {
     selectedRecipes.map(selectedRecipe => {
         selectedRecipe.recipe.recipeItem.map(recipeItem => {
@@ -67,6 +72,7 @@ const GroceryList = ({ selectedRecipes }) => {
     setIsLoading(false);
   }
 
+  // if ingredient is already in the list, add quantity, otherwise create new ingredient with the correct values
   const addQuantityToIngredient = (_id, quantity, unitType, ingredientName) => {
     let updatedIngredientList = ingredientList;
     let updatedIngredient = updatedIngredientList.find(ingredient => ingredient._id === _id);
@@ -91,6 +97,7 @@ const GroceryList = ({ selectedRecipes }) => {
             <Button title={"Back"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.65)", paddingLeft: 10, paddingRight: 10,}} containerStyle={styles.settingsButton} onPress={() => navigate("SelectedRecipes")}/>
         </View>
         <ActivityIndicator animating={isLoading} />
+        {/* Render all ingredients using ingredientCard object */}
         <FlatList
             data={ingredientList}
             keyExtractor={(item) => item._id}
@@ -104,6 +111,7 @@ const GroceryList = ({ selectedRecipes }) => {
   );
 };
 
+// Do not display navigation header
 GroceryList.navigationOptions = {
   header: () => false,
 };

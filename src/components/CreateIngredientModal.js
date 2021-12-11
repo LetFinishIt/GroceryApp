@@ -66,11 +66,13 @@ const styles = StyleSheet.create({
     }
 })
 
+// Modal to pop up on screen when adding a new ingredient
 const CreateIngredientModal = ({isVisible, onCancel, reloadOptions}) => {
     const [ingredientName, setIngredientName] = useState("");
     const [unitType, setUnitType] = useState("");
     const [calorie, setCalorie] = useState("");
 
+    // Submit to backend - validates that user is signed in and form is completed before submitting
     const submitNewIngredient = async () => {
         let email = await SecureStore.getItemAsync("email");
         let userId = await SecureStore.getItemAsync("userId");
@@ -101,6 +103,7 @@ const CreateIngredientModal = ({isVisible, onCancel, reloadOptions}) => {
 
     return (
         <>
+        {/* Only render when modal is triggered */}
         {isVisible && 
             <View style={styles.absoluteContainer}>
                 <KeyboardAvoidingView style={styles.container}>
@@ -109,6 +112,7 @@ const CreateIngredientModal = ({isVisible, onCancel, reloadOptions}) => {
                     </Text>
                     <View
                     style={{margin: 10}}/>
+                    {/* Form fields for name, unit type, and calories per unit */}
                     <Input
                     label="Ingredient Name"
                     value={ingredientName}
@@ -140,6 +144,7 @@ const CreateIngredientModal = ({isVisible, onCancel, reloadOptions}) => {
                     inputStyle={styles.input}
                     maxLength={5}
                     />
+                    {/* Cancel and confirm buttons */}
                     <View style={styles.buttonDiv}>
                         <Button
                         onPress={() => onCancel()}

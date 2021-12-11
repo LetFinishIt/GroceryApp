@@ -1,6 +1,7 @@
 import createDataContext from './createDataContext';
 import trackerApi from '../api/tracker';
 
+// track reducer for displaying navigation headers
 const trackReducer = (state, action) => {
   switch (action.type) {
     case 'fetch_tracks':
@@ -18,6 +19,7 @@ const createTrack = dispatch => async (name, locations) => {
   await trackerApi.post('/tracks', { name, locations });
 };
 
+// compiles provider and context to instantiate reducer
 export const { Provider, Context } = createDataContext(
   trackReducer,
   { fetchTracks, createTrack },

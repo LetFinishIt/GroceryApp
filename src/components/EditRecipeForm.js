@@ -6,7 +6,7 @@ import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import CreateIngredientModal from './CreateIngredientModal';
 import DeleteIngredientModal from './DeleteIngredientModal';
 
-
+// Form for editing recipe information, accessible from recipe details
 const EditRecipeForm = props => {
   const [recipeName, setRecipeName] = useState(props.recipeName);
   const [description, setDescription] = useState(props.description);
@@ -20,7 +20,6 @@ const EditRecipeForm = props => {
   const [deleteIngId, setDeleteIngId] = useState("");
   const [deleteIngTitle, setDeleteIngTitle] = useState("");
   const [searchValue, setSearchValue] = useState("");
-
 
   const [recipeItem, setRecipeItem] = useState(props.recipeItem);
 
@@ -46,13 +45,13 @@ const EditRecipeForm = props => {
       let otherSelectedIngredients = updatedSelectedingredient.filter(selectedIngredient => selectedIngredient.ingredients !== clickedIngredients.ingredients);
       setRecipeItem([...otherSelectedIngredients ]);
     }
-  // use effect for render ingredient list
+
+  // make api call for first render
   useEffect(() => {
     loadOptions();
   }, [])
 
-
-  // loading ingredients
+  // loading ingredients from backend
   const loadOptions = () => {
     Api()
     .get("ingredients")
@@ -72,14 +71,14 @@ const EditRecipeForm = props => {
       setIngredientOptions(ingredients);
     })
   }
-
+  // set information used by delete confirmation modal, triggering the modal to render
   const onClickDelete = (itemTitle, itemId) => {
     setDeleteIngTitle(itemTitle)
     setDeleteIngId(itemId)
   }
   // handle selected within dropdown
   const handleSelectIngredient = (item) => {
-      setRecipeItem([...recipeItem,item]);
+    setRecipeItem([...recipeItem,item]);
     setSearchValue("");
   }
 
@@ -117,7 +116,7 @@ const EditRecipeForm = props => {
     recipeItem: recipeItem
   }
 
-  // update the recipes
+  // submit to backend
   const updateRecipe = () => {
     Api()
     .put("editRecipe/?recipeId="+ recipeId, body )
@@ -128,11 +127,13 @@ const EditRecipeForm = props => {
 
   return(
     <View style={styles.ModalView}>  
+      {/* Modal for creating ingredient */}
       <CreateIngredientModal
         onCancel={() => { setOpenIngredientModal(false) }}
         isVisible={openIngredientModal}
         reloadOptions={() => loadOptions()}
       />
+      {/* Modal to confirm deleting ingredient */}
       <DeleteIngredientModal
         onCancel={() => { (setDeleteIngId(""), setDeleteIngTitle("")) }}
         isVisible={deleteIngId}
@@ -140,6 +141,7 @@ const EditRecipeForm = props => {
         ingredientTitle={deleteIngTitle}
         reloadOptions={() => loadOptions()}
       />
+      {/* Input fields for form */}
       <Input
         label="Recipe Name"
         value={recipeName}
@@ -179,6 +181,7 @@ const EditRecipeForm = props => {
       <View style={{width: "90%", marginLeft: "auto", marginRight: "auto", display: "flex", flexDirection: "row", alignItems: "center"}}>
         <View style={{width: "90%"}}>
         {deleteIngId === "" && !openIngredientModal &&
+          // autocomplete dropdown search field for selecting ingredients
           <AutocompleteDropdown
             ref={searchRef}
             controller={(controller) => {
@@ -221,9 +224,10 @@ const EditRecipeForm = props => {
             suggestionsListContainerStyle={{
               backgroundColor: "#383b42",
             }}
+            // optional parameter, overrides how each item is rendered
             renderItem={(item) => (
               <View style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-              {item.title.toLowerCase().includes(searchValue.toLowerCase()) &&
+              {item.title.toLowerCase().includes(searchValue.toLowerCase()) && // Checks if current search parameters match item title
               <>
                 <Text style={{ color: "#fff", padding: 15 }}>{item.title}</Text>
                 <Button title={"X"} buttonStyle={{backgroundColor: "rgba(0,0,0,0.15)"}} containerStyle={styles.deleteIngredientButton} 
@@ -242,6 +246,7 @@ const EditRecipeForm = props => {
               onPress={() => setOpenIngredientModal(true)}
               />
       </View>
+      {/* Render each selected ingredient */}
       <FlatList
       style={styles.flatList}
       data={recipeItem.filter(i => i !== null )}

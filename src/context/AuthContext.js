@@ -3,6 +3,7 @@ import createDataContext from "./createDataContext";
 import Api from "../api/apiInstance";
 import { navigate } from "../navigationRef";
 
+// context for storing state globally - used mainly in auth pages
 const authReducer = (state, action) => {
   switch (action.type) {
     case "add_error":
@@ -32,9 +33,9 @@ const clearErrorMessage = (dispatch) => () => {
   dispatch({ type: "clear_error_message" });
 };
 
+// sign up
 const signup = (dispatch) => async ({ email, password, firstName , lastName }) => {
   try {
-    console.log('sign up got call ');
     const body = {
       email: email,
       password: password,
@@ -61,6 +62,7 @@ const signup = (dispatch) => async ({ email, password, firstName , lastName }) =
   }
 };
 
+// sign in
 const signin = (dispatch) => async ({ email, password }) => {
   try {
     const body = {
@@ -89,12 +91,14 @@ const signin = (dispatch) => async ({ email, password }) => {
   }
 };
 
+// sign out
 const signout = (dispatch) => async () => {
   await AsyncStorage.removeItem("token");
   dispatch({ type: "signout" });
   navigate("loginFlow");
 };
 
+// compiles provider and context to instantiate reducer
 export const { Provider, Context } = createDataContext(
   authReducer,
   { signin, signout, signup, clearErrorMessage, tryLocalSignin },

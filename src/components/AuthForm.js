@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements';
 import Spacer from './Spacer';
 
+// auth form with sign in and sign up fields
 const AuthForm = ({ errorMessage, onSubmit, submitButtonText, isSignUp = false }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -14,6 +15,7 @@ const AuthForm = ({ errorMessage, onSubmit, submitButtonText, isSignUp = false }
     style={styles.form}
     >
       <Spacer />
+      {/* Extra fields visible only during sign up */}
       {isSignUp &&
       <>
         <Input
@@ -35,6 +37,7 @@ const AuthForm = ({ errorMessage, onSubmit, submitButtonText, isSignUp = false }
           inputStyle={styles.input}
         />
       </>}
+      {/* Fields visible for sign up and sign in */}
       <Input
         label="Email"
         value={email}
@@ -60,6 +63,7 @@ const AuthForm = ({ errorMessage, onSubmit, submitButtonText, isSignUp = false }
         <Text style={styles.errorMessage}>{errorMessage}</Text>
       ) : null}
       <Spacer>
+        {/* Submit button */}
         <Button
           title={submitButtonText}
           onPress={() => onSubmit(email, password, firstName, lastName)}
