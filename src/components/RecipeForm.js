@@ -1,14 +1,9 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { KeyboardAvoidingView, StyleSheet, View ,  SafeAreaView,TouchableOpacity, FlatList,Dimensions, ImageBackground} from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { StyleSheet, View, FlatList, Dimensions } from 'react-native';
 import { Text, Button, Input, Card } from 'react-native-elements';
 import Spacer from './Spacer';
-import {Picker} from '@react-native-picker/picker';
-//import Autocomplete from 'react-native-autocomplete-input';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
-import { Feather } from '@expo/vector-icons';
 import Api from '../api/apiInstance';
-import { ScrollView } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import CreateIngredientModal from './CreateIngredientModal';
 import DeleteIngredientModal from './DeleteIngredientModal';
 
@@ -18,17 +13,10 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [photo, setPhoto] = useState('');
-  const [recipeItem, setRecipeItem] = useState('');
-  const [itemQuantity, setItemQuantity] = useState('');
-  // Autocomplete drop setting
-  const [loading, setLoading] = useState(false)
-  const [suggestionsList, setSuggestionsList] = useState([])
-  const [selectedItem, setSelectedItem] = useState(null)
   const dropdownController = useRef(null)
   const searchRef = useRef(null)
   const [ingredientList, setIngredientList] = useState([]);
   const [ingredientOptions, setIngredientOptions] = useState([]);
-  //const [isChecked, setIsChecked] = useState(false)
   const [openIngredientModal, setOpenIngredientModal] = useState(false);
   const [deleteIngId, setDeleteIngId] = useState("");
   const [deleteIngTitle, setDeleteIngTitle] = useState("");
@@ -38,35 +26,23 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
   // Decrease Quantity for ingredients
   const decrementQuantity = (clickedIngredients) => {
     let updatedSelectedingredient = ingredientList.filter(i => i !== null);
-    //console.log('print out selected ingredients List', updatedSelectedingredient)
     let updatedIngredients = updatedSelectedingredient.find(selectedIngredient => selectedIngredient.ingredients === clickedIngredients.ingredients);
-    //console.log('print out selected ingredients before change', updatedSelectedingredient)
     updatedIngredients.itemQuantity --;
-    console.log('print out selected ingredients after change', updatedSelectedingredient)
-    //setSelectedRecipes([...updatedSelectedingredient]);
     setIngredientList([...updatedSelectedingredient]);
-    //console.log('print out selected ingredients list', ingredientList);
   }
 
   // Increase Quantity for ingredients
   const incrementQuantity = (clickedIngredients) => {
-    //console.log('print out selected ingredients before change', clickedIngredients)
     let updatedSelectedingredient = ingredientList.filter(i => i !== null);
-    //console.log('print out selected ingredients List', updatedSelectedingredient)
     let updatedIngredients = updatedSelectedingredient.find(selectedIngredient => selectedIngredient.ingredients === clickedIngredients.ingredients);
-    //console.log('print out selected ingredients before change', updatedSelectedingredient)
     updatedIngredients.itemQuantity ++;
-    console.log('print out selected ingredients after change', updatedSelectedingredient)
-    //setSelectedRecipes([...updatedSelectedingredient]);
     setIngredientList([...updatedSelectedingredient]);
-    //console.log('print out selected ingredients list', ingredientList);
   }
 
   // Remove ingredients
   const removeSelectedIngredients = (clickedIngredients) => {
     let updatedSelectedingredient = ingredientList.filter(i => i !== null);
     let otherSelectedIngredients = updatedSelectedingredient.filter(selectedIngredient => selectedIngredient.ingredients !== clickedIngredients.ingredients);
-    //setSelectedRecipes([...otherSelectedRecipes]);
     setIngredientList([...otherSelectedIngredients ]);
   }
 
@@ -115,20 +91,13 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
   const handleSelectIngredient = (item) => {
     if (ingredientList.length <= 1) {
       if(!ingredientList.filter(i => i !== null).some(existingItem => existingItem?._id === item?.id)) {
-      console.log('print ingredient list', ingredientList);
       setIngredientList([...ingredientList,item]);
       }
     }
     else{
-      console.log('running again');
       if(ingredientList.filter(i => i !== null).some(existingItem => existingItem?._id === item?.id)) {
-        console.log('print ingredient list', ingredientList);
         setIngredientList([...ingredientList,item]);
         }
-      // I comment out since i do not see the effect of below code toward your function but feel free to uncomment it 
-      //const remainingIngredientOptions = ingredientOptions.filter(option => option._id !== item._id);
-      //setIngredientOptions([...remainingIngredientOptions]);
-      //console.log('print remaining Ingredient Options',remainingIngredientOptions);
     }
     setSearchValue("");
   }
@@ -139,9 +108,6 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
   }
 
   return (
-    // <KeyboardAwareScrollView 
-    // style={styles.form}
-    // >
     <>
     <CreateIngredientModal
         onCancel={() => { setOpenIngredientModal(false) }}
@@ -209,12 +175,8 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
             closeOnSubmit={false}
             dataSet={ingredientOptions}
             onSelectItem={(item) => {
-              //console.log('print out the select item', item);
               handleSelectIngredient(item);
             }}
-            // onSubmit={(item) => {
-            //   handleSelectIngredient(item);
-            // }}
             suggestionsListMaxHeight={Dimensions.get("window").height * 0.4}
             textInputProps={{
               placeholder: "Type your ingredients",
@@ -236,13 +198,9 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
               alignSelfs: "center",
               backgroundColor: "#383b42"
             }}
-            // inputContainerStyle={{
-            //   backgroundColor: "transparent"
-            // }}
             suggestionsListContainerStyle={{
               backgroundColor: "#383b42",
             }}
-            // containerStyle={{ flexGrow: 1, flexShrink: 1 }}
             renderItem={(item, text) => (
               
               <View style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
@@ -256,14 +214,7 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
               }
                 </View>
             )}
-            // ChevronIconComponent={
-            //   <Feather name="x-circle" size={18} color="#fff" />
-            // }
-            // ClearIconComponent={
-            //   <Feather name="chevron-down" size={20} color="#fff" />
-            // }
             inputHeight={50}
-            // showChevron={false}
             showClear={false}
             rightTextExtractor={"test"}
             />}
@@ -292,7 +243,6 @@ const RecipeForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSi
             />
         </Spacer>
         </>
-        // </KeyboardAwareScrollView>
   );
 };
 
@@ -326,20 +276,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.65)",
     borderRadius: 20,
     borderColor: "rgba(0,0,0,0.65)",
-    // flex: 1,
-    //flexDirection: 'row',
   },
   cardSubContainer: {
-    //paddingLeft: 20,
     textAlignVertical: "center",
     textAlign: "center",
     backgroundColor: "rgba(0,0,0,0.3)",
     borderColor: "rgba(255,255,255,0)",
     borderWidth: 1,
-   //width: "100%",
-    //height: "100%",
-    //flex: 1,
-    //flexDirection: 'row',
  },
  cardText: {
     color: 'white', 

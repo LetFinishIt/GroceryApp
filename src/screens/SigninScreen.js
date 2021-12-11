@@ -1,16 +1,13 @@
-import React, { useContext } from 'react';
-import { View, StyleSheet, Text , Image, ImageBackground } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
+import React from 'react';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import AuthForm from '../components/AuthForm';
 import NavLink from '../components/NavLink';
-//import { Context } from '../context/AuthContext';
 import Api from '../api/apiInstance';
 import * as SecureStore from 'expo-secure-store';
 import {navigate} from "../navigationRef";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-function SigninScreen({navigator}) {
-  //const { state, signin, clearErrorMessage } = useContext(Context);
+function SigninScreen({}) {
   
   const handleLogin = async (email, password) => {
     const body = {
@@ -26,12 +23,9 @@ function SigninScreen({navigator}) {
       },
     })
     .then((response) => {
-      console.log("response.data: ", response.data.user);
       saveAuthInfo(response.data.accessToken, response.data.refreshToken, response.data.user);
     })
     .catch((e) => {
-      // console.log("e.response: ", e.response);
-      console.log("e.message: ", e.message);
     });
   }
 
@@ -42,18 +36,11 @@ function SigninScreen({navigator}) {
     await SecureStore.setItemAsync("lastName", user.last_name);
     await SecureStore.setItemAsync("email", user.email);
     await SecureStore.setItemAsync("userId", user._id);
-    console.log("await SecureStore.getItemAsync('accessToken'): ", await SecureStore.getItemAsync("accessToken"))
-    console.log("await SecureStore.getItemAsync('refreshToken'): ", await SecureStore.getItemAsync("refreshToken"))
-    console.log("await SecureStore.getItemAsync('firstName'): ", await SecureStore.getItemAsync("firstName"))
-    console.log("await SecureStore.getItemAsync('lastName'): ", await SecureStore.getItemAsync("lastName"))
-    console.log("await SecureStore.getItemAsync('email'): ", await SecureStore.getItemAsync("email"))
-    console.log("await SecureStore.getItemAsync('userId'): ", await SecureStore.getItemAsync("userId"))
     navigate("RecipeList");
   }
 
   return (
     <View style={styles.container}>
-      {/* <NavigationEvents onWillFocus={clearErrorMessage} /> */}
       <ImageBackground
           source={require('../../assets/images/background.png')}
           resizeMode="cover"
@@ -61,8 +48,6 @@ function SigninScreen({navigator}) {
       >
         <KeyboardAwareScrollView>
       <AuthForm
-        //headerText="Sign In to Your Account"
-        // errorMessage={state.errorMessage}
         onSubmit={(email, password, firstName, lastName) => handleLogin(email, password)}
         submitButtonText="Sign In"
       />

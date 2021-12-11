@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements';
 import Spacer from './Spacer';
 
-const AuthForm = ({ headerText, errorMessage, onSubmit, submitButtonText, isSignUp = false }) => {
+const AuthForm = ({ errorMessage, onSubmit, submitButtonText, isSignUp = false }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');

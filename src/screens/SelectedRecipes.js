@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, FlatList, TouchableOpacity,View, ImageBackground, Switch} from "react-native";
-import { Card, Icon, Avatar, Button, SearchBar , FAB} from "react-native-elements";
-import Api from '../api/apiInstance';
+import { Card, Avatar, Button } from "react-native-elements";
 import {navigate} from "../navigationRef";
 import { connect } from 'react-redux';
 

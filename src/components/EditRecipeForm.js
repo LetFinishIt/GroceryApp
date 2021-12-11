@@ -1,30 +1,21 @@
-import React, {useState, useEffect, useContext, useRef} from 'react';
-import {View, TouchableOpacity,  ImageBackground,  StyleSheet, FlatList, Dimensions} from 'react-native';
-//import styles from './styles';
-//import {useNavigation} from '@react-navigation/native';
-//import Input from '../../../../common/Input';
+import React, {useState, useEffect, useRef} from 'react';
+import {View, StyleSheet, FlatList, Dimensions} from 'react-native';
 import Api from '../api/apiInstance';
 import { Text, Button, Input, Card } from 'react-native-elements';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import CreateIngredientModal from './CreateIngredientModal';
 import DeleteIngredientModal from './DeleteIngredientModal';
-import { NavigationContext } from 'react-navigation';
-import {navigate} from "../navigationRef";
 
 
 const EditRecipeForm = props => {
-  // set newArray= props.recipeItem
-  //  newArray.find( selected => selected.id === )
   const [recipeName, setRecipeName] = useState(props.recipeName);
   const [description, setDescription] = useState(props.description);
   const [price, setPrice] = useState(props.price);
   const [photo, setPhoto] = useState(props.photo);
   const recipeId = props.recipeId;
-  // autodrop down 
   const dropdownController = useRef(null)
   const searchRef = useRef(null)
   const [ingredientOptions, setIngredientOptions] = useState([]);
-  //const [isChecked, setIsChecked] = useState(false)
   const [openIngredientModal, setOpenIngredientModal] = useState(false);
   const [deleteIngId, setDeleteIngId] = useState("");
   const [deleteIngTitle, setDeleteIngTitle] = useState("");
@@ -33,30 +24,19 @@ const EditRecipeForm = props => {
 
   const [recipeItem, setRecipeItem] = useState(props.recipeItem);
 
-
     // Decrease Quantity for ingredients
     const decrementQuantity = (clickedIngredients) => {
       let updatedSelectedingredient = recipeItem.filter(i => i !== null);
-      //console.log('print out selected ingredients List', updatedSelectedingredient)
       let updatedIngredients = updatedSelectedingredient.find(selectedIngredient => selectedIngredient.ingredients === clickedIngredients.ingredients);
-      //console.log('print out selected ingredients before change', updatedSelectedingredient)
       updatedIngredients.itemQuantity --;
-      console.log('print out selected ingredients after change', updatedSelectedingredient)
-      //setSelectedRecipes([...updatedSelectedingredient]);
       setRecipeItem([...updatedSelectedingredient]);
-      //console.log('print out selected ingredients list', ingredientList);
     }
   
     // Increase Quantity for ingredients
     const incrementQuantity = (clickedIngredients) => {
-      //console.log('print out selected ingredients before change', clickedIngredients)
       let updatedSelectedingredient = recipeItem.filter(i => i !== null);
-      //console.log('print out selected ingredients List', updatedSelectedingredient)
       let updatedIngredients = updatedSelectedingredient.find(selectedIngredient => selectedIngredient.ingredients === clickedIngredients.ingredients);
-      //console.log('print out selected ingredients before change', updatedSelectedingredient)
       updatedIngredients.itemQuantity ++;
-      console.log('print out selected ingredients after change', updatedSelectedingredient)
-      //setSelectedRecipes([...updatedSelectedingredient]);
       setRecipeItem([...updatedSelectedingredient]);
     }
   
@@ -64,13 +44,11 @@ const EditRecipeForm = props => {
     const removeSelectedIngredients = (clickedIngredients) => {
       let updatedSelectedingredient = recipeItem.filter(i => i !== null);
       let otherSelectedIngredients = updatedSelectedingredient.filter(selectedIngredient => selectedIngredient.ingredients !== clickedIngredients.ingredients);
-      //setSelectedRecipes([...otherSelectedRecipes]);
       setRecipeItem([...otherSelectedIngredients ]);
     }
   // use effect for render ingredient list
   useEffect(() => {
     loadOptions();
-    // console.log('print out ingredient option', ingredientOptions);
   }, [])
 
 
@@ -79,8 +57,6 @@ const EditRecipeForm = props => {
     Api()
     .get("ingredients")
     .then((response) => {
-      // console.log(response.data.ingredients);
-      console.log(typeof response.data.ingredients);
       const items = response.data.ingredients;
       const ingredients = items.map((item) => ({
         ingredients: item._id,
@@ -92,7 +68,6 @@ const EditRecipeForm = props => {
         title: items.find(selectedIngredient => selectedIngredient._id === item.ingredients).ingredientName + " - " + items.find(selectedIngredient => selectedIngredient._id === item.ingredients).unitType,
         itemQuantity : item.itemQuantity,
       }))
-      console.log('print ingred', ingred);
       setRecipeItem([...ingred]);
       setIngredientOptions(ingredients);
     })
@@ -104,13 +79,7 @@ const EditRecipeForm = props => {
   }
   // handle selected within dropdown
   const handleSelectIngredient = (item) => {
-      console.log('running again');
-      console.log('print out item', item);
       setRecipeItem([...recipeItem,item]);
-      // if(ingredientList.filter(i => i !== null).some(existingItem => existingItem._id === item.id)) {
-      //   console.log('print ingredient list', ingredientList);
-      //   setRecipeItem([...recipeItem,item]);
-      //   }
     setSearchValue("");
   }
 
@@ -153,11 +122,9 @@ const EditRecipeForm = props => {
     Api()
     .put("editRecipe/?recipeId="+ recipeId, body )
     .then((response) => {
-      console.log(response);
+      props.onClose();
     })
   }
-
-  // add the keyboard award .. 
 
   return(
     <View style={styles.ModalView}>  
@@ -225,12 +192,8 @@ const EditRecipeForm = props => {
             closeOnSubmit={false}
             dataSet={ingredientOptions}
             onSelectItem={(item) => {
-              //console.log('print out the select item', item);
               handleSelectIngredient(item);
             }}
-            // onSubmit={(item) => {
-            //   handleSelectIngredient(item);
-            // }}
             suggestionsListMaxHeight={Dimensions.get("window").height * 0.4}
             textInputProps={{
               placeholder: "Type your ingredients",
@@ -258,9 +221,7 @@ const EditRecipeForm = props => {
             suggestionsListContainerStyle={{
               backgroundColor: "#383b42",
             }}
-            // containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-            renderItem={(item, text) => (
-              
+            renderItem={(item) => (
               <View style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
               {item.title.toLowerCase().includes(searchValue.toLowerCase()) &&
               <>
@@ -273,7 +234,6 @@ const EditRecipeForm = props => {
                 </View>
             )}
             inputHeight={50}
-            // showChevron={false}
             showClear={false}
             rightTextExtractor={"test"}
             />}
@@ -284,7 +244,6 @@ const EditRecipeForm = props => {
       </View>
       <FlatList
       style={styles.flatList}
-        // nestedScrollEnabled={true}
       data={recipeItem.filter(i => i !== null )}
       keyExtractor={(item) => item.ingredients}
       renderItem={({ item }) => IngredientCard(item)}
@@ -292,7 +251,6 @@ const EditRecipeForm = props => {
       <Button 
       onPress={() => {
         updateRecipe();
-        console.log('sucessful update recipe');
         props.onClose();
       }} 
       title={"Submit"}
@@ -338,17 +296,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.65)",
     borderRadius: 20,
     borderColor: "rgba(0,0,0,0.65)",
-    // flex: 1,
-    //flexDirection: 'row',
   },
   cardSubContainer: {
-    //paddingLeft: 20,
     textAlignVertical: "center",
     textAlign: "center",
-   //width: "100%",
-    //height: "100%",
-    //flex: 1,
-    //flexDirection: 'row',
  },
  cardText: {
     color: 'white', 
@@ -376,7 +327,6 @@ const styles = StyleSheet.create({
   borderRadius: 40,
   marginBottom: 10,
   marginTop: 10,
-  // marginLeft: 10,
   backgroundColor: "rgba(0,0,0,0.65)",
  },
  newIngredientButton :{

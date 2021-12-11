@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, Button, Input, Card } from 'react-native-elements';
-import { KeyboardAvoidingView, StyleSheet, View ,  SafeAreaView,TouchableOpacity, FlatList,Dimensions, ImageBackground} from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, View, Dimensions, ImageBackground} from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import Api from '../api/apiInstance';
 
@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         backgroundColor: "white",
         padding: 20,
-        // border: "2px solid grey",
     },
     hidden: {
         display: "none",
@@ -87,7 +86,6 @@ const CreateIngredientModal = ({isVisible, onCancel, reloadOptions}) => {
             Api()
             .post("ingredient", body)
             .then((response) => {
-                console.log("response: ", response)
                 setIngredientName("");
                 setUnitType("");
                 setCalorie("");
@@ -97,7 +95,6 @@ const CreateIngredientModal = ({isVisible, onCancel, reloadOptions}) => {
                 onCancel();
             })
             .catch((err) => {
-                console.log("error: ", err)
             })
         }
     }

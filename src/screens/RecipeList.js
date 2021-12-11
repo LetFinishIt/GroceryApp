@@ -1,27 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, FlatList, TouchableOpacity, View, ImageBackground, Image , Switch,  RefreshControl} from "react-native";
-import Modal from "react-native-modal"; 
-import { NavigationEvents } from "react-navigation";
-import { Card, Icon, Avatar, Button, SearchBar , FAB} from "react-native-elements";
+import { StyleSheet, Text, FlatList, TouchableOpacity, View, ImageBackground, Switch,  RefreshControl} from "react-native";
+import { Card, Icon, Avatar, Button, SearchBar } from "react-native-elements";
 import Api from '../api/apiInstance';
-import { ScrollView } from "react-native-gesture-handler";
 import {navigate} from "../navigationRef";
-import { FontAwesome } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import * as SecureStore from 'expo-secure-store';
 
-const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
-  //const { state, fetchTracks } = useContext(TrackContext);
+const RecipeList = ({ selectedRecipes, setSelectedRecipes }) => {
   const [recipeList, setRecipeList] = useState([]);
   const [viewGlobalRecipes, setViewGlobalRecipes] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
-  const toggleSwitchReact = () => setIsEnabled(previousState => !previousState);
-  const toggleSwitchElement = () => {
-    setViewGlobalRecipes(!viewGlobalRecipes);
-  };
   
   const selectRecipe = (recipe) => {
     let existingSelectedRecipe = selectedRecipes.find(selectedRecipe => selectedRecipe.recipe._id === recipe._id);
@@ -43,8 +32,6 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
     return (
       <TouchableOpacity  
       onPress={() =>
-        //navigation.navigate("TrackDetail", { _id: item._id })
-        // console.log('button pressed'),
         navigate("RecipeDetails", {recipeId: recipe._id})
       }>
       <Card containerStyle={{borderRadius: 10, backgroundColor:'#dce2e3'}}>
@@ -62,7 +49,6 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
         </View>
         </View>
         </View>
-        {/* <Text>{recipe.description}</Text> */}
       </Card>
       </TouchableOpacity>
     );
@@ -84,8 +70,6 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
       setRecipeList(response.data.recipes);
     })
     .catch((e) => {
-      console.log("e.response: ", e.response);
-      console.log("e.message: ", e.message);
     });
   }
 
@@ -94,12 +78,9 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
     Api()
     .get(`userRecipes/?email=${email}`)
     .then((response) => {
-      console.log("response.data.recipes: ", response.data.recipes)
       setRecipeList([...response.data.recipes[0]]);
     })
     .catch((e) => {
-      console.log("e.response: ", e.response);
-      console.log("e.message: ", e.message);
     });
   }
 
@@ -125,8 +106,6 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
         inputStyle={{backgroundColor: '#dce2e3'}}
         containerStyle={{backgroundColor: '#dce2e3', borderRadius: 40, marginTop: 40, width: '95%', alignSelf:'center'}}
         inputContainerStyle={{backgroundColor: '#dce2e3'}}
-        //onChangeText={this.updateSearch}
-        //value={search}
       />
       <View style={styles.settingBar}>
         <View  style={{flexDirection: 'row'}}>
@@ -136,7 +115,6 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
         onValueChange={(value) => setViewGlobalRecipes(value)}
         />
         </View>
-        {/* <Button title={"Cart"} buttonStyle={{backgroundColor: '#ed288e'}} containerStyle={styles.button} onPress={() => navigate("SelectedRecipes")}/> */}
         <TouchableOpacity 
           onPress={() => navigate("SelectedRecipes")}
           style={styles.cartButton}
@@ -151,7 +129,6 @@ const RecipeList = ({ navigation, selectedRecipes, setSelectedRecipes }) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} 
           onRefresh={() => {
-            //fetch data here
             onRefresh();      
            }} />
         }
@@ -173,9 +150,7 @@ const styles = StyleSheet.create({
  recipeInfo: {
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
-  //flexDirection: 'column',
   paddingLeft: 50,
-  // flexShrink: 1,
  },
  button :{
   height: 40,
@@ -199,27 +174,9 @@ const styles = StyleSheet.create({
  },
  container: {
   flex: 1,
-  // justifyContent: 'center',
-  // alignItems: "center",
-  //paddingTop: 20,
-  //paddingBottom: 20,
  },
-//  floatingBtn :{
-//   //borderWidth: 1,
-//   //borderColor: 'rgba(0,0,0,0.2)',
-//   alignItems: 'center',
-//   justifyContent: 'center',
-//   //width: 70,
-//   position: 'absolute',
-//   bottom: 40,
-//   right: 40,
-//   //height: 70,
-//   //backgroundColor: '#fff',
-//   //borderRadius: 100,
-//  },
 settingBar: {
   flexDirection: 'row',
-  //backgroundColor: '#dce2e3',
   borderRadius: 10,
   marginTop: 20,
   width: '95%',

@@ -1,16 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, StyleSheet, Image, ImageBackground } from 'react-native';
-import { NavigationEvents, SafeAreaView } from 'react-navigation';
-// import { Context as AuthContext } from '../context/AuthContext';
 import RecipeForm from '../components/RecipeForm';
-import NavLink from '../components/NavLink';
 import Api from '../api/apiInstance';
 import * as SecureStore from 'expo-secure-store';
 import {navigate} from "../navigationRef";
 
 
 const AddRecipes = ({ navigation }) => {
-  // const { state, signup, clearErrorMessage } = useContext(AuthContext);
 
   const AddNewRecipes =  async (recipeName, price, description, photo, ingredientList)=>{
     if (recipeName && description && ingredientList.length > 0) {
@@ -27,26 +23,20 @@ const AddRecipes = ({ navigation }) => {
       
       
       Api().post("recipe" , body).then((response)=>{
-        console.log("response.data: ", response.data);
         navigate("RecipeList");
       }).catch((e) => {
-        // console.log("e.response: ", e.response);
-        console.log("e.message: ", e.message);
       });
     }
   };
 
   return (
     <View style={styles.container}>
-      {/* <NavigationEvents onWillFocus={clearErrorMessage} /> */}
       <ImageBackground
           source={require('../../assets/images/boards.png')}
           resizeMode="cover"
           style={styles.imageContainer}
       >
         <RecipeForm
-          //headerText="Sign Up for GroList"
-          // errorMessage={state.errorMessage}
           submitButtonText="Create"
           onSubmit={(recipeName, price, description, recipeItem, photo, ingredientList)=>
             { AddNewRecipes(recipeName, price, description, recipeItem , photo, ingredientList);
@@ -78,7 +68,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignSelf: 'center',
     marginTop: 50,
-    //backgroundColor: 'black',
   },
   linkContainer: {
     alignItems: 'center',

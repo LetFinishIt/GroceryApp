@@ -40,21 +40,6 @@ const GroceryList = ({ selectedRecipes }) => {
       loadAllIngredients();
   }, []);
 
-  // Refreshing 
-  const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
-    Api()
-    .get("ingredients")
-    .then((response) => {
-        loadIngredientList(response.data.ingredients);
-        setRefreshing(false);
-    })
-    .catch((e) => {
-      console.log("e.response: ", e.response);
-      console.log("e.message: ", e.message);
-    });
-  }, []);
-
   // load all ingredients
   const loadAllIngredients = () => {
     Api()
@@ -63,8 +48,6 @@ const GroceryList = ({ selectedRecipes }) => {
         loadIngredientList(response.data.ingredients);
     })
     .catch((e) => {
-      console.log("e.response: ", e.response);
-      console.log("e.message: ", e.message);
     });
   }
 
@@ -111,14 +94,9 @@ const GroceryList = ({ selectedRecipes }) => {
         <FlatList
             data={ingredientList}
             keyExtractor={(item) => item._id}
-            // onRefresh={onRefresh}
-            // refreshing={refreshing}
             refreshControl={
               <RefreshControl refreshing={refreshing} 
-              onRefresh={() => {
-                //fetch data here
-                console.log("refreshing");      
-               }} />
+              onRefresh={() => { }} />
             }
             renderItem={({ item }) => IngredientCard(item)}
         />

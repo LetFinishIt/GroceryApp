@@ -1,15 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, View, StyleSheet, Text, ImageBackground, Modal, TouchableOpacity , Alert} from 'react-native';
-import { NavigationEvents } from 'react-navigation';
-import NavLink from '../components/NavLink';
 import Api from '../api/apiInstance';
 import * as SecureStore from 'expo-secure-store';
-import { Card, Image, ListItem, Button, Icon } from 'react-native-elements'
-import { ButtonGroup } from 'react-native-elements/dist/buttons/ButtonGroup';
+import { Image, Button, Icon } from 'react-native-elements'
 import { navigate } from '../navigationRef';
-import Spacer from '../components/Spacer';
 import SmallSpacer from '../components/SmallSpacer';
-import { FontAwesome5 } from '@expo/vector-icons'; 
 import EditRecipeForm from '../components/EditRecipeForm';
 
 
@@ -34,7 +29,6 @@ function RecipeDetails(props) {
     } 
 
     useEffect(() => {
-    console.log("recipeId: ", recipeId);
     //get current user id
     getCurrentUserEmail();
     Api()
@@ -48,8 +42,6 @@ function RecipeDetails(props) {
         }
     )
     .then((response) => {
-        console.log()
-        console.log("response.data: ", response.data);
         setName(response.data.recipe.recipeName);
         setImageUrl(response.data.recipe.recipePhoto);
         setDescription(response.data.recipe.description);
@@ -60,12 +52,10 @@ function RecipeDetails(props) {
         setRecipeOwnerEmail(response.data.recipe.userEmail);
     })
     .catch((e) => {
-        console.log("e: ", e.message)
     });
     }, [])
  
     const deleteRecipe = (recipeId) =>{
-        console.log("recipeId: ", recipeId);
         Api()
         .delete(
             'recipe/?recipeId=' + recipeId,
@@ -74,27 +64,9 @@ function RecipeDetails(props) {
                     authorization: "Bearer " + token
                 },
             }
-        ).then((response) => {
-            console.log()
-            console.log("response.data: ", response.data);
-        })
+        )
         .catch((e) => {
-            console.log("e: ", e.message)
         });
-    }
-
-    const logInfo = () => {
-        console.log("name: ", name)
-        console.log("description: ", description)
-        console.log("imageUrl: ", imageUrl)
-        console.log("price: ", price)
-        console.log("ingredients: ", ingredients)
-        console.log("recipeItems: ", recipeItems)
-        recipeItems?.map((recipeItem, index) => {
-            let ingredient = ingredients?.find(ingredient => ingredient._id === recipeItem.ingredients)
-            console.log("")
-            console.log("ingredient?.name: ", ingredient?.ingredientName)
-        })
     }
 
     const createTwoButtonAlert = () =>
@@ -144,7 +116,6 @@ function RecipeDetails(props) {
         </Modal>
         <View style={styles.cardContainer}>
             <ScrollView
-                // wrapperStyle={styles.card} 
                 contentContainerStyle={styles.scrollViewContainer}
             >
                 <SmallSpacer />
@@ -157,7 +128,6 @@ function RecipeDetails(props) {
                 }
                 </View>
                 <SmallSpacer />
-                {/* <Card.Divider/> */}
                 <View style={{alignItems: "center"}}>
                     <Image
                         style={styles.recipeImage}
@@ -192,7 +162,6 @@ function RecipeDetails(props) {
                     <Button 
                         onPress={() => {
                             setModalVisible(true);
-                            console.log('navigation works');
                         }
                     } 
                         title={"Edit"}
@@ -236,20 +205,12 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingBottom: 20,
     },
-    modalContainer: {
-        // flex: 1,
-        // justifyContent: 'center',
-        // alignItems: "center",
-        // paddingTop: 20,
-        // paddingBottom: 20,
-    },
     header: {
         fontSize: 24,
         textAlign: "center",
         color: "white",
     },
     ingredientContainer: {
-        // width: "100%",
         alignItems: "flex-start",
         textAlign: 'left',
         paddingLeft: 20,
@@ -265,7 +226,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 18,
-        // textAlign: "center",
         color: "white",
     },
     closeButton : {
@@ -274,9 +234,6 @@ const styles = StyleSheet.create({
         width: 200,
         minWidth: 40,
         borderRadius: 40,
-        // marginBottom: 10,
-        // marginRight: 10,
-        // marginLeft: 10,
         backgroundColor: "rgba(0,0,0,0.65)",
     }
 });

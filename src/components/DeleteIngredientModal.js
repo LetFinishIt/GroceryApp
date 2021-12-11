@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Text, Button, Input, Card } from 'react-native-elements';
-import { KeyboardAvoidingView, StyleSheet, View ,  SafeAreaView,TouchableOpacity, FlatList,Dimensions, ImageBackground} from 'react-native';
-import * as SecureStore from 'expo-secure-store';
+import React from 'react';
+import { Text, Button } from 'react-native-elements';
+import { KeyboardAvoidingView, StyleSheet, View, Dimensions, ImageBackground} from 'react-native';
 import Api from '../api/apiInstance';
 
 const styles = StyleSheet.create({
@@ -19,13 +18,9 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         backgroundColor: "white",
         padding: 20,
-        // border: "2px solid grey",
     },
     hidden: {
         display: "none",
-    },
-    visible: {
-
     },
     buttonDiv: {
         display: "flex",
@@ -77,7 +72,6 @@ const DeleteIngredientModal = ({isVisible, ingredientId, ingredientTitle, onCanc
             onCancel();
         })
         .catch((err) => {
-            console.log("error: ", err)
         })
     }
 
