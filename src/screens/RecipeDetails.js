@@ -195,6 +195,9 @@ const styles = StyleSheet.create({
     buttonContainer: {
         width: "80%",
     },
+    modalContainer: { // imagebackground requires some style, even if empty
+
+    },
     cardContainer: {
         backgroundColor: 'rgba(0,0,0,0.65)',
         width: "90%",
