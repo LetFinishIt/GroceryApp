@@ -1,8 +1,8 @@
 import React from "react";
 import renderer from 'react-test-renderer';
-import AuthForm from "../../components/AuthForm";
 import RecipeForm from "../../components/RecipeForm";
 import EditRecipeForm from "../../components/EditRecipeForm";
+import DeleteIngredientForm from "../../components/DeleteIngredientModal";
 
 // hide warnings for tests to make results easier to see
 const originalWarn = console.error.bind(console.error)
@@ -10,13 +10,13 @@ beforeAll(() => {
   console.error = (msg) => 
     !msg.toString().includes('') && originalWarn(msg)
 });
-// test the style of the sign in form 
-describe('<SignInForm />', () => {
-    it('check for view style', () => {
-      const tree = renderer.create(<AuthForm />).toJSON();
-      expect(tree.props.style.justifyContent).toContain('center');
-    });
-  });
+// test the style of the delete ingredient form 
+describe('<DeleteIngredientForm />', () => {     
+  it('check for view style', () => {       
+    const tree = renderer.create(<DeleteIngredientForm />).toJSON();       
+    expect(tree.props.style.alignItems).toContain('center');     
+  });   
+});
 
 // Test the modal visibility 
 describe('<RecipeForm />', () => {
