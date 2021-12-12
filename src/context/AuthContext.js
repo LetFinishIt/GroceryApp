@@ -54,7 +54,7 @@ const signup = (dispatch) => async ({ email, password, firstName , lastName }) =
       },
     }).then((response) => {
       navigate("Signin");
-      console.log("response.body: ", response.body)
+      console.log("response.body: ", response)
     });
   } catch (err) {
     console.log("err: ", err)
