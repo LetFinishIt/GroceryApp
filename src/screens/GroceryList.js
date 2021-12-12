@@ -60,7 +60,6 @@ const GroceryList = ({ selectedRecipes }) => {
     selectedRecipes.map(selectedRecipe => {
         selectedRecipe.recipe.recipeItem.map(recipeItem => {
             let ingredient = allIngredients.find(ingredient => ingredient._id === recipeItem.ingredients);
-            console.log("")
             addQuantityToIngredient(
                 ingredient._id, 
                 selectedRecipe.quantity * recipeItem.itemQuantity, 

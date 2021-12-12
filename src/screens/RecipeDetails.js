@@ -82,7 +82,7 @@ function RecipeDetails(props) {
     Alert.alert('Delete Recipe', 'Are you sure to delete this recipe', [
       {
         text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
+        onPress: () => { },
         style: 'cancel',
       },
       { text: 'OK', onPress: () => {
@@ -116,7 +116,6 @@ function RecipeDetails(props) {
             <Button 
             onPress={() => {
             setModalVisible(false);
-            console.log('navigation works');
             }} 
             title={"Close"}
             containerStyle={styles.closeButton}

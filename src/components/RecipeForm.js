@@ -78,8 +78,6 @@ const RecipeForm = ({ errorMessage, onSubmit, submitButtonText }) => {
     Api()
     .get("ingredients")
     .then((response) => {
-      console.log(response.data.ingredients);
-      console.log(typeof response.data.ingredients);
       const items = response.data.ingredients;
       const ingredients = items.map((item) => ({
         ingredients: item._id,
@@ -175,7 +173,7 @@ const RecipeForm = ({ errorMessage, onSubmit, submitButtonText }) => {
             controller={(controller) => {
               dropdownController.current = controller
             }}
-            bottomOffset={40}
+            bottomOffset={80}
             clearOnFocus={true}
             value={searchValue}
             onChangeText={setSearchValue}

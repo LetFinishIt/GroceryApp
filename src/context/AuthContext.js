@@ -35,6 +35,7 @@ const clearErrorMessage = (dispatch) => () => {
 
 // sign up
 const signup = (dispatch) => async ({ email, password, firstName , lastName }) => {
+  console.log("signup method running")
   try {
     const body = {
       email: email,
@@ -53,8 +54,10 @@ const signup = (dispatch) => async ({ email, password, firstName , lastName }) =
       },
     }).then((response) => {
       navigate("Signin");
+      console.log("response.body: ", response.body)
     });
   } catch (err) {
+    console.log("err: ", err)
     dispatch({
       type: "add_error",
       payload: "Something went wrong with sign up",

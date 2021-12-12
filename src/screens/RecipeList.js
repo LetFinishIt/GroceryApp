@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, FlatList, TouchableOpacity, View, ImageBackground, Switch,  RefreshControl} from "react-native";
 import { Card, Icon, Avatar, Button, SearchBar } from "react-native-elements";
 import Api from '../api/apiInstance';
